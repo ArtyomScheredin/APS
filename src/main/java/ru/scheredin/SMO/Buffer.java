@@ -1,4 +1,4 @@
-package ru.scheredin;
+package ru.scheredin.SMO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,16 +18,12 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Buffer {
 
     @Value("#{new Integer(${buffer.capacity})}")
-    private final int bufferSize = 0;
+    private final int bufferCapacity = 0;
     /**
      * fixed size buffer. Write/read from multiple threads.
      * Null values and completed requests are cells available for insertion
      */
-    private final ArrayList<Request> buffer = new ArrayList<>(bufferSize);
-    /**
-     * non-clustered index for buffer to access Request in O(1)
-     */
-    private final TreeSet<Request> requestsIndex = new TreeSet<>();
+
     private final ReentrantLock lock = new ReentrantLock();
     private volatile int numberOfRequests = 0;
     private PropertyChangeSupport support = new PropertyChangeSupport(this);
@@ -46,7 +42,7 @@ public class Buffer {
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
-    public void rejectLastInserted() {
+   private void rejectLastInserted() {
         Request request;
         lock.lock();
         try {
@@ -59,6 +55,9 @@ public class Buffer {
     }
 
     public void insert(@NonNull Request request, int index) {
+        if (numberOfRequests == bufferCapacity) {
+            rejectLastInserted();
+        }
         lock.lock();
         try {
             if (isOccupiedPosition(index)) {
@@ -92,6 +91,6 @@ public class Buffer {
     }
 
     public int getBufferSize() {
-        return bufferSize;
+        return bufferCapacity;
     }
 }

@@ -1,4 +1,4 @@
-package ru.scheredin;
+package ru.scheredin.SMO;
 
 public record Response(State state, Long bufferInsertedTime, Long bufferTookTime, Long completedTime) {
     public Response(State state) {

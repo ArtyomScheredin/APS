@@ -1,4 +1,4 @@
-package ru.scheredin;
+package ru.scheredin.SMO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
@@ -26,18 +26,18 @@ public class Seller implements Runnable {
             try {
                 request = singleRequestQueue.take();
             } catch (InterruptedException e) {
-                break;
+                return;
             }
+            buffer.insert(request, indexToInsert);
+
+            request.setBufferInsertedTime(System.currentTimeMillis());
             int initialIndex = indexToInsert;
             do {
                 indexToInsert = ((indexToInsert - 1) != buffer.getBufferSize()) ? ++indexToInsert : 0;
                 if (initialIndex == indexToInsert) {
-                    buffer.rejectLastInserted();
+                    //buffer.rejectLastInserted();
                 }
             } while (buffer.isOccupiedPosition(indexToInsert));
-
-            request.setBufferInsertedTime(System.currentTimeMillis());
-            buffer.insert(request, indexToInsert);
         }
     }
 }

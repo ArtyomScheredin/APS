@@ -1,4 +1,4 @@
-package ru.scheredin;
+package ru.scheredin.SMO;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;

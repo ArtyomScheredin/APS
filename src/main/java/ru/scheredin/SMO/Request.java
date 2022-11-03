@@ -1,4 +1,4 @@
-package ru.scheredin;
+package ru.scheredin.SMO;
 
 import java.util.concurrent.CompletableFuture;
 
