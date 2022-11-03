@@ -24,20 +24,10 @@ public class Seller implements Runnable {
         while (!Thread.currentThread().isInterrupted()) {
             Request request;
             try {
-                request = singleRequestQueue.take();
+                buffer.insert(singleRequestQueue.take(), indexToInsert);
             } catch (InterruptedException e) {
-                return;
+                Thread.currentThread().interrupt();
             }
-            buffer.insert(request, indexToInsert);
-
-            request.setBufferInsertedTime(System.currentTimeMillis());
-            int initialIndex = indexToInsert;
-            do {
-                indexToInsert = ((indexToInsert - 1) != buffer.getBufferSize()) ? ++indexToInsert : 0;
-                if (initialIndex == indexToInsert) {
-                    //buffer.rejectLastInserted();
-                }
-            } while (buffer.isOccupiedPosition(indexToInsert));
         }
     }
 }

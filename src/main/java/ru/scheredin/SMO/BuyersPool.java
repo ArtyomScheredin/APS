@@ -22,4 +22,8 @@ public class BuyersPool implements Runnable {
             executors.submit(buyer);
         }
     }
+
+    public void stop() {
+        executors.shutdown();
+    }
 }

@@ -5,10 +5,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
+import ru.scheredin.SMO.internal.IndexedArray;
 
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
-import java.util.TreeSet;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -27,6 +27,7 @@ public class Buffer {
     private final ReentrantLock lock = new ReentrantLock();
     private volatile int numberOfRequests = 0;
     private PropertyChangeSupport support = new PropertyChangeSupport(this);
+    private final IndexedArray storage = new IndexedArray(bufferCapacity);
 
     @Autowired
     @Qualifier("bufferInsertedMonitor")
@@ -55,6 +56,7 @@ public class Buffer {
     }
 
     public void insert(@NonNull Request request, int index) {
+        if ()
         if (numberOfRequests == bufferCapacity) {
             rejectLastInserted();
         }
