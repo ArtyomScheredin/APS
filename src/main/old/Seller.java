@@ -1,4 +1,4 @@
-package ru.scheredin.SMO;
+package ru.scheredin.SMO.old;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
@@ -22,6 +22,7 @@ public class Seller implements Runnable {
     @Override
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
+            semaphore.acquire()
             Request request;
             try {
                 buffer.insert(singleRequestQueue.take(), indexToInsert);

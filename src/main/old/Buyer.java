@@ -1,4 +1,4 @@
-package ru.scheredin.SMO;
+package ru.scheredin.SMO.old;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 
 import static java.lang.Math.round;
-import static ru.scheredin.SMO.Response.State.PENDING;
+import static ru.scheredin.SMO.old.Response.State.PENDING;
 
 /**
  * Supplier class for sending requests to {@link Buffer buffer}
@@ -23,6 +23,8 @@ public class Buyer implements Runnable {
 
     @Autowired
     private Seller seller;
+    @Autowired
+    private Statistics statistics;
     @Value("${requests.per.second}")
     private int requestsPerSecond;
 
@@ -46,12 +48,7 @@ public class Buyer implements Runnable {
         }
     }
 
-    /**
-     * time interval for puasson distribution
-     */
-    private long getPuassonInterval() {
-        return round((-1.0 / requestsPerSecond) * Math.log(Math.random())) * timeUnit;
-    }
+
 
     private Request getNewRequest() {
         return new Request(serialNumber, counter);

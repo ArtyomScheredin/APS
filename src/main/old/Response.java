@@ -1,6 +1,6 @@
-package ru.scheredin.SMO;
+package ru.scheredin.SMO.old;
 
-public record Response(State state, Long bufferInsertedTime, Long bufferTookTime, Long completedTime) {
+public record Response(State state, Long bufferInsertedTime, Long bufferTookTime, Long completedTime, int buyerNumber) {
     public Response(State state) {
         this(state, null, null, null);
         if (state == State.ACCEPTED) {

@@ -1,4 +1,4 @@
-package ru.scheredin.SMO;
+package ru.scheredin.SMO.old;
 
 public class UncompletedRequestsException extends RuntimeException{
 

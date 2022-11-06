@@ -1,14 +1,15 @@
-package ru.scheredin.SMO;
+package ru.scheredin.SMO.old;
 
 import java.util.concurrent.CompletableFuture;
 
 public final class Request implements Comparable<Request> {
     private int buyerNumber;
     private int serialNumber;
+    private Long creationDate;
     private Long bufferInsertedTime;
     private Long bufferTookTime;
     private Long completedTime;
-    private CompletableFuture<Response> response = new CompletableFuture<>();
+    //private State state = new CompletableFuture<>();
 
     public Request(int buyerNumber, int serialNumber) {
         this.buyerNumber = buyerNumber;
@@ -57,6 +58,10 @@ public final class Request implements Comparable<Request> {
 
     public int getBuyerNumber() {
         return buyerNumber;
+    }
+
+    public Request(int buyerNumber) {
+        this.buyerNumber = buyerNumber;
     }
 
     public int getSerialNumber() {
