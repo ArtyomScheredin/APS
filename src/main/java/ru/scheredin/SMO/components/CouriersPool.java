@@ -10,11 +10,10 @@ public class CouriersPool implements Dumpable {
 
     public CouriersPool(int couriersNumber,
                         double processingTime,
-                        int duration,
                         Buffer buffer) {
         couriers = new ArrayList<>(couriersNumber);
         for (int index = 0; index < couriersNumber; index++) {
-            couriers.add(new Courier(index, processingTime, buffer, duration));
+            couriers.add(new Courier(index, processingTime, buffer));
         }
     }
 

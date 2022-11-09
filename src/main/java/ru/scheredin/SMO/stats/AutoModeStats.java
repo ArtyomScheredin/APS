@@ -22,6 +22,7 @@ public class AutoModeStats {
     public void init(int buyersNumber, int couriersNumber) {
         couriersRestTime = new ArrayList<>(couriersNumber);
         couriersWorkTime = new ArrayList<>(couriersNumber);
+        this.buyersNumber = buyersNumber;
         for (int i = 0; i < couriersNumber; i++) {
             couriersRestTime.add(0.);
             couriersWorkTime.add(0.);
@@ -61,7 +62,7 @@ public class AutoModeStats {
             if (rest == null) {
                 result.add(i, new CourierStats(i, Double.MAX_VALUE));
             } else {
-                result.add(i, new CourierStats(i, work / rest));
+                result.add(i, new CourierStats(i, work / (rest + work)));
             }
         }
         return result;
@@ -70,25 +71,28 @@ public class AutoModeStats {
     public List<BuyerStats> getBuyersResults() {
         int[] requestsCount = new int[buyersNumber];
         int[] completed = new int[buyersNumber];
-        double[] bufferTime = new double[buyersNumber];
-        double[] processTime = new double[buyersNumber];
+        double[] bufferTime = new double[buyersNumber]; //buffer time for all requests from buyer
+        double[] processTime = new double[buyersNumber]; //processing time for all requests from buyer
 
         Arrays.fill(requestsCount, 0);
         Arrays.fill(completed, 0);
         Arrays.fill(bufferTime, 0);
         Arrays.fill(processTime, 0);
-
+        Request nullRequest = null;
         for (Request request : requests) { //Counting requests, overall buffer
             // and process time and number of completed requests
             int buyer = request.getBuyer();
             requestsCount[buyer]++;
 
-            if (request.getCompletionTime() != null) {
+            if (request.isRejected()) {
                 completed[buyer]++;
             }
 
             bufferTime[buyer] += request.getBufferTookTime() - request.getBufferInsertedTime();
-            processTime[buyer] += request.getBufferTookTime() - request.getCompletionTime();
+            Double completionTime = request.getCompletionTime();
+            if (completionTime != null) {
+                processTime[buyer] += completionTime - request.getBufferTookTime();
+            }
         }
 
         double[] avgBufferTime = new double[buyersNumber];
@@ -98,10 +102,37 @@ public class AutoModeStats {
             avgProcessingTime[i] = processTime[i] / requestsCount[i];
         }
 
-        for (Request request : requests) { //Calculating dispersion
-
+        double[] dispBufferTime = new double[buyersNumber];
+        double[] dispProcessingTime = new double[buyersNumber];
+        Arrays.fill(dispProcessingTime, 0);
+        Arrays.fill(dispBufferTime, 0);
+        for (Request request : requests) {   //Calculating dispersion  disp = (sum(x_avg - x_i)^2) /n
+            int buyer = request.getBuyer();
+            dispBufferTime[buyer] += avgBufferTime[buyer] + request.getBufferInsertedTime() - request.getBufferTookTime();
+            if (request.getCompletionTime() != null) {
+                dispProcessingTime[buyer] += avgBufferTime[buyer] + request.getBufferTookTime() - request.getCompletionTime();
+            }
         }
-        return null;
+
+        for (int i = 0; i < buyersNumber; i++) {
+            dispBufferTime[i] /= buyersNumber;
+            dispProcessingTime[i] /= buyersNumber;
+        }
+
+        ArrayList<BuyerStats> result = new ArrayList<>(buyersNumber);
+        for (int i = 0; i < buyersNumber; i++) {
+            double rejectProbability = (double) completed[i] / requestsCount[i];
+            double avgTime = avgBufferTime[i] + avgProcessingTime[i];
+            result.add(new BuyerStats(i,
+                    requestsCount[i],
+                    rejectProbability,
+                    avgTime,
+                    avgBufferTime[i],
+                    avgProcessingTime[i],
+                    dispBufferTime[i],
+                    dispProcessingTime[i]));
+        }
+        return result;
     }
 
     public static AutoModeStats INSTANCE() {

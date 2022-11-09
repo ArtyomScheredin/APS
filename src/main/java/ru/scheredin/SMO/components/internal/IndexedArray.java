@@ -1,6 +1,7 @@
 package ru.scheredin.SMO.components.internal;
 
 
+import ru.scheredin.SMO.Orchestrator;
 import ru.scheredin.SMO.components.Request;
 import ru.scheredin.SMO.stats.StepModeStats;
 
@@ -49,7 +50,9 @@ public class IndexedArray implements Iterable<Request> {
         Integer newestIndex = entry.getValue();
         buffer.set(newestIndex, null);
         size--;
-        return entry.getKey();
+        Request rejected = entry.getKey();
+        rejected.setRejected(true);
+        return rejected;
     }
 
     public Request get(int index) {

@@ -14,7 +14,7 @@ public class Courier {
     private final Buffer buffer;
 
 
-    public Courier(int index, double processingTime, Buffer buffer, double duration) {
+    public Courier(int index, double processingTime, Buffer buffer) {
         this.index = index;
         this.processingTime = processingTime;
         this.buffer = buffer;
@@ -35,7 +35,6 @@ public class Courier {
     }
 
     private void startTask() {
-
         request = buffer.take();
         request.setBufferTookTime(Orchestrator.INSTANCE().getCurTime());
         StepModeStats.INSTANCE().saveSnapshot("Took request " + request);

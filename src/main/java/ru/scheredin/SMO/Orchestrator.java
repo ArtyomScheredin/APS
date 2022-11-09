@@ -18,7 +18,6 @@ public class Orchestrator {
         Buffer buffer = new Buffer(round.bufferCapacity());
         CouriersPool couriersPool = new CouriersPool(round.courierNumber(),
                 round.processingTime(),
-                round.duration(),
                 buffer);
         BuyersPool buyersPool = new BuyersPool(
                 round.buyersNumber(),
@@ -39,6 +38,8 @@ public class Orchestrator {
             curTime = action.getKey();
             action.getValue().run();
         }
+        int x = 0;
+        System.out.println(x);
     }
 
     public void addAction(Double timestamp, Runnable runnable) {

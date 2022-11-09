@@ -7,6 +7,7 @@ public final class Request implements Comparable<Request> {
     private Double bufferInsertedTime;
     private Double bufferTookTime;
     private Double completedTime;
+    private boolean isRejected = false;
 
 
     public Request(int buyerNumber, int serial) {
@@ -45,6 +46,14 @@ public final class Request implements Comparable<Request> {
 
     public int getBuyer() {
         return buyerNumber;
+    }
+
+    public boolean isRejected() {
+        return isRejected;
+    }
+
+    public void setRejected(boolean rejected) {
+        isRejected = rejected;
     }
 
     @Override

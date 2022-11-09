@@ -1,20 +1,24 @@
 package ru.scheredin.SMO;
 
 import ru.scheredin.SMO.stats.AutoModeStats;
+import ru.scheredin.SMO.stats.BuyerStats;
 import ru.scheredin.SMO.stats.Snapshot;
 import ru.scheredin.SMO.stats.StepModeStats;
 
 import java.io.InputStreamReader;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
+        BuyerStats buyerStats = new BuyerStats(1, 1, 1, 1, 1, 1, 1, 1);
         Round round = new Round(5, 5, 0.1, 10, 3, 3);
         Orchestrator.INSTANCE().runRound(round);
-        AutoModeStats.INSTANCE().getCourierResults();
-    stepLocalMode();
+        List<BuyerStats> buyersResults = AutoModeStats.INSTANCE().getBuyersResults();
+        System.out.println(BuyerStats.getHeader());
+        buyersResults.forEach(System.out::println);
     }
 
     private static void stepLocalMode() {
