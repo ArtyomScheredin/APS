@@ -3,7 +3,7 @@ package ru.scheredin.SMO.components.internal;
 
 import ru.scheredin.SMO.Orchestrator;
 import ru.scheredin.SMO.components.Request;
-import ru.scheredin.SMO.stats.StepModeStats;
+import ru.scheredin.SMO.stats.StepModeStatsService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,10 +55,6 @@ public class IndexedArray implements Iterable<Request> {
         return rejected;
     }
 
-    public Request get(int index) {
-        return buffer.get(index);
-    }
-
     public boolean isEmpty() {
         return size == 0;
     }
@@ -88,7 +84,7 @@ public class IndexedArray implements Iterable<Request> {
             prev = cur;
             cur = (cur == buffer.size() - 1) ? 0 : cur + 1;
             while ((request = buffer.get(prev)) == null) { //iterating over buffer
-                StepModeStats.INSTANCE().saveSnapshot("Finding request to take. Current index = " + cur);
+                StepModeStatsService.INSTANCE().saveSnapshot("Finding request to take. Current index = " + cur);
                 prev = cur;
                 cur = (cur == buffer.size() - 1) ? 0 : cur + 1;
             }
@@ -108,7 +104,7 @@ public class IndexedArray implements Iterable<Request> {
         public void add(Request request) {
             while (buffer.get(prev) != null) { //iterating over buffer
                 prev = cur;
-                StepModeStats.INSTANCE().saveSnapshot("Finding place to insert. Next index = " + cur);
+                StepModeStatsService.INSTANCE().saveSnapshot("Finding place to insert. Next index = " + cur);
                 cur = (cur == buffer.size() - 1) ? 0 : cur + 1;
             }
             IndexedArray.this.set(prev, request);

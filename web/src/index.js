@@ -1,17 +1,114 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import Request from "./Request";
+import './index.css'
+import {render} from "react-dom";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+class Square extends React.Component {
+    render() {
+        return (
+            <button className="square">
+                {/* TODO */}
+            </button>
+        );
+    }
+}
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+class Board extends React.Component {
+    renderSquare(i) {
+        return <Square/>;
+    }
+
+    render() {
+        const status = 'Next player: X';
+
+        return (
+            <div>
+                <div className="status">{status}</div>
+                <div className="board-row">
+                    {this.renderSquare(0)}
+                    {this.renderSquare(1)}
+                    {this.renderSquare(2)}
+                </div>
+                <div className="board-row">
+                    {this.renderSquare(3)}
+                    {this.renderSquare(4)}
+                    {this.renderSquare(5)}
+                </div>
+                <div className="board-row">
+                    {this.renderSquare(6)}
+                    {this.renderSquare(7)}
+                    {this.renderSquare(8)}
+                </div>
+            </div>
+        );
+    }
+}
+
+const InputParameter = ({name}) => {
+    return (<div className="input-parameter">
+            <label for={name}>{name}</label>
+            <input type="text" id={name}/>
+        </div>
+    );
+}
+
+const Form = () => {
+    const fields = ["buyersNumber",
+        "courierNumber",
+        "processingTime",
+        "bufferCapacity",
+        "lambda",
+        "duration"]
+    let listFields = fields.map((field) => <InputParameter name={field}/>);
+    return (
+        <form>
+            {listFields}
+            <input type="submit"/>
+        </form>
+    )
+}
+
+const MainPage = () => {
+    return (<div>
+        <Form/>
+        <a href=""/*TODO*/ className="auto-mode-link">auto mode</a>
+        <br/>
+        <a href=""/*TODO*/ className="step-mode-link">step mode</a>
+    </div>);
+}
+
+const Header = () => {
+    return (<div className="header">
+        <a href=""/*TODO*/ className="main-menu-link">new simulation</a>
+    </div>);
+}
+
+const SnapShot = {
+    []
+}
+
+const Snapshot = ({snapshot}) => {
+    return (
+        <div>
+            <p>"{snapshot.time} : {snapshot.message}"</p>
+            <
+        </div>
+    )
+}
+
+const StepModePage = () => {
+return (
+    <div>
+        <Header/>
+        <Snapshot></Snapshot>
+        <button>next</button>
+        <button>prev</button>
+    </div>
+)
+}
+
+// ========================================
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<Header/>);

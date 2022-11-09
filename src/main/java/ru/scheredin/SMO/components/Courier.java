@@ -1,8 +1,8 @@
 package ru.scheredin.SMO.components;
 
 import ru.scheredin.SMO.Orchestrator;
-import ru.scheredin.SMO.stats.AutoModeStats;
-import ru.scheredin.SMO.stats.StepModeStats;
+import ru.scheredin.SMO.stats.AutoModeStatsService;
+import ru.scheredin.SMO.stats.StepModeStatsService;
 
 public class Courier {
     private State state = State.FREE;
@@ -37,7 +37,7 @@ public class Courier {
     private void startTask() {
         request = buffer.take();
         request.setBufferTookTime(Orchestrator.INSTANCE().getCurTime());
-        StepModeStats.INSTANCE().saveSnapshot("Took request " + request);
+        StepModeStatsService.INSTANCE().saveSnapshot("Took request " + request);
         Orchestrator.INSTANCE().addAction(Orchestrator.INSTANCE().getCurTime() + processingTime, this::finishTask);
     }
 
@@ -45,7 +45,7 @@ public class Courier {
         request.setCompletionTime(Orchestrator.INSTANCE().getCurTime());
         request = null;
 
-        StepModeStats.INSTANCE().saveSnapshot("Completed request " + request);
+        StepModeStatsService.INSTANCE().saveSnapshot("Completed request " + request);
         if (buffer.isEmpty()) {
             changeState(State.FREE);
         } else {
@@ -57,9 +57,9 @@ public class Courier {
         state = newState;
         double duration = Orchestrator.INSTANCE().getCurTime() - changeStateTime;
         if (newState.equals(State.FREE)) {
-            AutoModeStats.INSTANCE().notifyWorkEnded(index, duration);
+            AutoModeStatsService.INSTANCE().notifyWorkEnded(index, duration);
         } else {
-            AutoModeStats.INSTANCE().notifyRestEnded(index, duration);
+            AutoModeStatsService.INSTANCE().notifyRestEnded(index, duration);
         }
         changeStateTime = Orchestrator.INSTANCE().getCurTime();
     }

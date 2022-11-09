@@ -1,8 +1,7 @@
 package ru.scheredin.SMO.components;
 
-import ru.scheredin.SMO.Orchestrator;
 import ru.scheredin.SMO.components.internal.IndexedArray;
-import ru.scheredin.SMO.stats.StepModeStats;
+import ru.scheredin.SMO.stats.StepModeStatsService;
 
 import java.util.ArrayList;
 import java.util.ListIterator;
@@ -31,7 +30,7 @@ public class Buffer implements Dumpable {
     public void insert(Request request) {
         if (storage.isFull()) {
             Request rejected = storage.rejectNewest();
-            StepModeStats.INSTANCE().saveSnapshot("Reject request: " + rejected);
+            StepModeStatsService.INSTANCE().saveSnapshot("Reject request: " + rejected);
         }
         insertIterator.add(request);
     }

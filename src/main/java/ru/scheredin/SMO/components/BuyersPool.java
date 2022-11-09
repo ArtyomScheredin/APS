@@ -2,8 +2,8 @@ package ru.scheredin.SMO.components;
 
 
 import ru.scheredin.SMO.Orchestrator;
-import ru.scheredin.SMO.stats.AutoModeStats;
-import ru.scheredin.SMO.stats.StepModeStats;
+import ru.scheredin.SMO.stats.AutoModeStatsService;
+import ru.scheredin.SMO.stats.StepModeStatsService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,15 +38,15 @@ public class BuyersPool implements Dumpable {
                 final int serial = requestSerial++;
                 actions.put(time, () -> {
                     Request request = new Request(curBuyer, serial);
-                    AutoModeStats.INSTANCE().save(request);
+                    AutoModeStatsService.INSTANCE().save(request);
                     request.setBufferInsertedTime(Orchestrator.INSTANCE().getCurTime());
 
                     state.set(curBuyer, request);
-                    StepModeStats.INSTANCE().saveSnapshot("Created request " + request);
+                    StepModeStatsService.INSTANCE().saveSnapshot("Created request " + request);
 
                     buffer.insert(request);
                     state.set(curBuyer, null);
-                    StepModeStats.INSTANCE().saveSnapshot("Inserted request " + request);
+                    StepModeStatsService.INSTANCE().saveSnapshot("Inserted request " + request);
                     couriersPool.notifyNewRequest();
                 });
             }

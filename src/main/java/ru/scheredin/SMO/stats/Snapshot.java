@@ -5,7 +5,6 @@ import ru.scheredin.SMO.components.Request;
 
 import java.util.List;
 
-
 public record Snapshot(List<Request> buyers,
                        List<Request> buffer,
                        List<Request> couriers,

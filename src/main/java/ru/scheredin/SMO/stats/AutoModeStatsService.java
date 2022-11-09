@@ -1,22 +1,21 @@
 package ru.scheredin.SMO.stats;
 
-import com.google.inject.Singleton;
 import ru.scheredin.SMO.components.Request;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Singleton
-public class AutoModeStats {
+public class AutoModeStatsService {
     private ArrayList<Request> requests = new ArrayList<>();
     private ArrayList<Double> couriersRestTime;
     private ArrayList<Double> couriersWorkTime;
     private int buyersNumber;
 
-    private static AutoModeStats instance;
+    private static AutoModeStatsService instance;
+    private boolean isReady = false;
 
-    public AutoModeStats() {
+    public AutoModeStatsService() {
     }
 
     public void init(int buyersNumber, int couriersNumber) {
@@ -33,6 +32,15 @@ public class AutoModeStats {
         requests.clear();
         couriersRestTime = null;
         couriersRestTime = null;
+        isReady = false;
+    }
+
+    public boolean isReady() {
+        return isReady;
+    }
+
+    public void setReady(boolean status) {
+        isReady = status;
     }
 
     public void save(Request request) {
@@ -134,9 +142,9 @@ public class AutoModeStats {
         return result;
     }
 
-    public static AutoModeStats INSTANCE() {
+    public static AutoModeStatsService INSTANCE() {
         if (instance == null) {
-            instance = new AutoModeStats();
+            instance = new AutoModeStatsService();
         }
         return instance;
     }

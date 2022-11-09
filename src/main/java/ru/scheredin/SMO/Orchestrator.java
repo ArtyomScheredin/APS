@@ -3,8 +3,8 @@ package ru.scheredin.SMO;
 import ru.scheredin.SMO.components.Buffer;
 import ru.scheredin.SMO.components.BuyersPool;
 import ru.scheredin.SMO.components.CouriersPool;
-import ru.scheredin.SMO.stats.AutoModeStats;
-import ru.scheredin.SMO.stats.StepModeStats;
+import ru.scheredin.SMO.stats.AutoModeStatsService;
+import ru.scheredin.SMO.stats.StepModeStatsService;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -25,8 +25,10 @@ public class Orchestrator {
                 round.duration(),
                 buffer,
                 couriersPool);
-        StepModeStats.INSTANCE().init(buyersPool, buffer, couriersPool);
-        AutoModeStats.INSTANCE().init(round.buyersNumber(), round.courierNumber());
+        StepModeStatsService.INSTANCE().clear();
+        AutoModeStatsService.INSTANCE().clear();
+        StepModeStatsService.INSTANCE().init(buyersPool, buffer, couriersPool);
+        AutoModeStatsService.INSTANCE().init(round.buyersNumber(), round.courierNumber());
 
 
         actions = buyersPool.generateActions();
@@ -37,6 +39,9 @@ public class Orchestrator {
             curTime = action.getKey();
             action.getValue().run();
         }
+
+        AutoModeStatsService.INSTANCE().setReady(true);
+        StepModeStatsService.INSTANCE().setReady(true);
     }
 
     public void addAction(Double timestamp, Runnable runnable) {
