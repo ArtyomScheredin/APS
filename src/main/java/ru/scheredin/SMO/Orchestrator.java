@@ -29,8 +29,7 @@ public class Orchestrator {
         AutoModeStats.INSTANCE().init(round.buyersNumber(), round.courierNumber());
 
 
-        TreeMap<Double, Runnable> longRunnableMap = buyersPool.generateActions();
-        actions = longRunnableMap;
+        actions = buyersPool.generateActions();
 
         for (Map.Entry<Double, Runnable> action = actions.pollFirstEntry();
              !actions.isEmpty();
@@ -38,8 +37,6 @@ public class Orchestrator {
             curTime = action.getKey();
             action.getValue().run();
         }
-        int x = 0;
-        System.out.println(x);
     }
 
     public void addAction(Double timestamp, Runnable runnable) {

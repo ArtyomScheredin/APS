@@ -1,5 +1,6 @@
 package ru.scheredin.SMO.stats;
 
+import ru.scheredin.SMO.Orchestrator;
 import ru.scheredin.SMO.components.Request;
 
 import java.util.List;
@@ -10,14 +11,17 @@ public record Snapshot(List<Request> buyers,
                        List<Request> couriers,
                        int nextInsertIndex,
                        int nextTakeIndex,
-                       String message) {
-
+                       String message,
+                       double time) {
+    public Snapshot(List<Request> buyers, List<Request> buffer, List<Request> couriers, int nextInsertIndex, int nextTakeIndex, String message) {
+        this(buyers, buffer, couriers, nextInsertIndex, nextTakeIndex, message, Orchestrator.INSTANCE().getCurTime());
+    }
 
     @Override
     public String toString() {
 
        StringBuilder builder = new StringBuilder();
-        builder.append(message);
+        builder.append(time + ": ").append(message);
         builder.append("\nbuyers:\n");
         for (int i = 0; i < buyers.size(); i++) {
             builder.append(buyers.get(i) == null ? '-' : buyers.get(i)).append(" ");

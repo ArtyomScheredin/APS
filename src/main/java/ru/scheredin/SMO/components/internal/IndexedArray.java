@@ -51,7 +51,7 @@ public class IndexedArray implements Iterable<Request> {
         buffer.set(newestIndex, null);
         size--;
         Request rejected = entry.getKey();
-        rejected.setRejected(true);
+        rejected.setBufferTookTime(Orchestrator.INSTANCE().getCurTime());
         return rejected;
     }
 

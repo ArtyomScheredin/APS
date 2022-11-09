@@ -13,9 +13,9 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        BuyerStats buyerStats = new BuyerStats(1, 1, 1, 1, 1, 1, 1, 1);
-        Round round = new Round(5, 5, 0.1, 10, 3, 3);
+        Round round = new Round(5, 5, 0.1, 10, 12, 3);
         Orchestrator.INSTANCE().runRound(round);
+       // stepLocalMode();
         List<BuyerStats> buyersResults = AutoModeStats.INSTANCE().getBuyersResults();
         System.out.println(BuyerStats.getHeader());
         buyersResults.forEach(System.out::println);

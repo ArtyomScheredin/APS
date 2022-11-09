@@ -57,4 +57,8 @@ public class StepModeStats {
     public Iterator<Snapshot> iterator() {
         return snapshots.iterator();
     }
+
+    public ArrayList<Snapshot> getSnapshots() {
+        return snapshots;
+    }
 }
