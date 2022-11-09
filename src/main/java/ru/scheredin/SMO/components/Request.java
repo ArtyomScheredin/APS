@@ -3,17 +3,15 @@ package ru.scheredin.SMO.components;
 public final class Request implements Comparable<Request> {
     private int buyerNumber;
     private int serial;
-    private double creationTime;
 
     private Double bufferInsertedTime;
     private Double bufferTookTime;
     private Double completedTime;
 
 
-    public Request(int buyerNumber, int serial, double creationDate) {
+    public Request(int buyerNumber, int serial) {
         this.buyerNumber = buyerNumber;
         this.serial = serial;
-        this.creationTime = creationDate;
     }
 
     @Override
@@ -35,6 +33,18 @@ public final class Request implements Comparable<Request> {
 
     public void setCompletionTime(double completedTime) {
         this.completedTime = completedTime;
+    }
+
+    public Double getBufferTookTime() {
+        return bufferTookTime;
+    }
+
+    public Double getCompletionTime() {
+        return completedTime;
+    }
+
+    public int getBuyer() {
+        return buyerNumber;
     }
 
     @Override

@@ -12,14 +12,12 @@ public class Courier {
     private final int index;
     private final double processingTime;
     private final Buffer buffer;
-    private final double duration;
 
 
     public Courier(int index, double processingTime, Buffer buffer, double duration) {
         this.index = index;
         this.processingTime = processingTime;
         this.buffer = buffer;
-        this.duration = duration;
         changeStateTime = Orchestrator.INSTANCE().getCurTime();
     }
 
@@ -31,22 +29,16 @@ public class Courier {
         if (state == State.WORKING) {
             return;
         }
+        changeState(State.WORKING);
 
-        state = State.WORKING;
-        AutoModeStats.INSTANCE().notifyRestEnded(index, changeStateTime - Orchestrator.INSTANCE().getCurTime());
-        changeStateTime = Orchestrator.INSTANCE().getCurTime();
         Orchestrator.INSTANCE().addAction(Orchestrator.INSTANCE().getCurTime(), this::startTask);
     }
 
     private void startTask() {
+
         request = buffer.take();
         request.setBufferTookTime(Orchestrator.INSTANCE().getCurTime());
-        StepModeStats.INSTANCE().saveSnapshot();
-
-
-        if (Orchestrator.INSTANCE().getCurTime() + processingTime > duration) {
-            return;
-        }
+        StepModeStats.INSTANCE().saveSnapshot("Took request " + request);
         Orchestrator.INSTANCE().addAction(Orchestrator.INSTANCE().getCurTime() + processingTime, this::finishTask);
     }
 
@@ -54,16 +46,33 @@ public class Courier {
         request.setCompletionTime(Orchestrator.INSTANCE().getCurTime());
         request = null;
 
-        StepModeStats.INSTANCE().saveSnapshot();
+        StepModeStats.INSTANCE().saveSnapshot("Completed request " + request);
         if (buffer.isEmpty()) {
-            state = State.FREE;
-            AutoModeStats.INSTANCE().notifyWorkEnded(index, changeStateTime - Orchestrator.INSTANCE().getCurTime());
+            changeState(State.FREE);
         } else {
             Orchestrator.INSTANCE().addAction(Orchestrator.INSTANCE().getCurTime(), this::startTask);
         }
     }
 
+    private void changeState(State newState) {
+        state = newState;
+        double duration = Orchestrator.INSTANCE().getCurTime() - changeStateTime;
+        if (newState.equals(State.FREE)) {
+            AutoModeStats.INSTANCE().notifyWorkEnded(index, duration);
+        } else {
+            AutoModeStats.INSTANCE().notifyRestEnded(index, duration);
+        }
+        changeStateTime = Orchestrator.INSTANCE().getCurTime();
+    }
 
+    @Override
+    public String toString() {
+        return request == null ? "-" : request.toString();
+    }
+
+    public Request getRequest() {
+        return request;
+    }
 
     private enum State {
         FREE, WORKING

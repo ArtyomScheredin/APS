@@ -7,17 +7,13 @@ import ru.scheredin.SMO.stats.StepModeStats;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
 
 
-public class BuyersPool {
+public class BuyersPool implements Dumpable {
     private int buyersNumber;
     private double lambda;
-    private double duration;
+    private double endTime;
     private final Buffer buffer;
     private final CouriersPool couriersPool;
     private ArrayList<Request> state;
@@ -25,7 +21,7 @@ public class BuyersPool {
     public BuyersPool(int buyersNumber, double lambda, double duration, Buffer buffer, CouriersPool couriersPool) {
         this.buyersNumber = buyersNumber;
         this.lambda = lambda;
-        this.duration = duration;
+        this.endTime = Orchestrator.INSTANCE().getCurTime() + duration;
         this.buffer = buffer;
         this.couriersPool = couriersPool;
         Request[] requests = new Request[buyersNumber];
@@ -38,19 +34,19 @@ public class BuyersPool {
         int requestSerial = 0;
         for (int buyer = 0; buyer < buyersNumber; buyer++) {
             int curBuyer = buyer;
-            for (double time = 0; time < duration; time += getPuassonInterval()) {
-                final double issueTime = time;
+            for (double time = 0; time < endTime; time += getPuassonInterval()) {
                 final int serial = requestSerial++;
                 actions.put(time, () -> {
-                    Request request = new Request(curBuyer, serial, issueTime);
+                    Request request = new Request(curBuyer, serial);
                     AutoModeStats.INSTANCE().save(request);
                     request.setBufferInsertedTime(Orchestrator.INSTANCE().getCurTime());
 
                     state.set(curBuyer, request);
-                    StepModeStats.INSTANCE().saveSnapshot();
+                    StepModeStats.INSTANCE().saveSnapshot("Created request " + request);
 
                     buffer.insert(request);
                     state.set(curBuyer, null);
+                    StepModeStats.INSTANCE().saveSnapshot("Inserted request " + request);
                     couriersPool.notifyNewRequest();
                 });
             }
@@ -65,7 +61,10 @@ public class BuyersPool {
         return (-1.0 / lambda) * Math.log(Math.random());
     }
 
-    public List<Request> getState() {
-        return Collections.unmodifiableList(state);
+    @Override
+    public ArrayList<Request> getDump() {
+        return new ArrayList<>(state);
     }
+
+
 }

@@ -1,11 +1,11 @@
 package ru.scheredin.SMO.components;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-public class CouriersPool {
+public class CouriersPool implements Dumpable {
     private List<Courier> couriers;
 
     public CouriersPool(int couriersNumber,
@@ -23,7 +23,8 @@ public class CouriersPool {
         freeCourier.ifPresent(Courier::submitTask);
     }
 
-    public List<Courier> getState() {
-        return Collections.unmodifiableList(couriers);
+    @Override
+    public ArrayList<Request> getDump() {
+        return couriers.stream().map(Courier::getRequest).collect(Collectors.toCollection(ArrayList::new));
     }
 }

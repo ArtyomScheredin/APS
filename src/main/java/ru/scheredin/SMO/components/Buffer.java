@@ -3,15 +3,14 @@ package ru.scheredin.SMO.components;
 import ru.scheredin.SMO.components.internal.IndexedArray;
 import ru.scheredin.SMO.stats.StepModeStats;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.ListIterator;
 
 /**
  * Buffer with circled, separated insert/take operations and fifo reject policy
  */
-public class Buffer {
+public class Buffer implements Dumpable {
 
-    private final int bufferCapacity;
     /**
      * fixed size buffer. Write/read from multiple threads.
      * Null values and completed requests are cells available for insertion
@@ -23,7 +22,6 @@ public class Buffer {
 
 
     public Buffer(int bufferCapacity) {
-        this.bufferCapacity = bufferCapacity;
         storage = new IndexedArray(bufferCapacity);
         insertIterator = storage.iterator();
         takeIterator = storage.iterator();
@@ -31,11 +29,10 @@ public class Buffer {
 
     public void insert(Request request) {
         if (storage.isFull()) {
-            storage.rejectNewest();
+            Request rejected = storage.rejectNewest();
+            StepModeStats.INSTANCE().saveSnapshot("Reject request: " + rejected);
         }
         insertIterator.add(request);
-
-        StepModeStats.INSTANCE().saveSnapshot();
     }
 
     public Request take() {
@@ -51,7 +48,16 @@ public class Buffer {
         return storage.isEmpty();
     }
 
-    public List<Request> getState() {
-        return storage.getState();
+    @Override
+    public ArrayList<Request> getDump() {
+        return new ArrayList<>(storage.getState());
+    }
+
+    public int getInsertPointer() {
+        return insertIterator.nextIndex();
+    }
+
+    public int getTakePointer() {
+        return takeIterator.nextIndex();
     }
 }

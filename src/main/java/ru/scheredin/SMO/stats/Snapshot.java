@@ -1,33 +1,37 @@
 package ru.scheredin.SMO.stats;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import ru.scheredin.SMO.components.Courier;
 import ru.scheredin.SMO.components.Request;
 
 import java.util.List;
 
 
 public record Snapshot(List<Request> buyers,
-                        List<Request> buffer,
-                        List<Courier> couriers) {
+                       List<Request> buffer,
+                       List<Request> couriers,
+                       int nextInsertIndex,
+                       int nextTakeIndex,
+                       String message) {
 
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("buyers:\n");
+
+       StringBuilder builder = new StringBuilder();
+        builder.append(message);
+        builder.append("\nbuyers:\n");
         for (int i = 0; i < buyers.size(); i++) {
-            builder.append(i).append(": ").append(buyers.get(i) == null ? '-' : buyers.get(i)).append("\n");
+            builder.append(buyers.get(i) == null ? '-' : buyers.get(i)).append(" ");
         }
-        builder.append("buffer:\n");
+        builder.append("\nbuffer:\n");
         for (int i = 0; i < buffer.size(); i++) {
-            builder.append(i).append(": ").append(buffer.get(i) == null ? '-' : buffer.get(i)).append("\n");
+            builder.append(buffer.get(i) == null ? '-' : buffer.get(i)).append(" ");
         }
-        builder.append("couriers:\n");
-        for (int i = 0; i < buffer.size(); i++) {
-            builder.append(i).append(": ").append(couriers.get(i) == null ? '-' : couriers.get(i)).append("\n");
+        builder.append("\ncouriers:\n");
+        for (int i = 0; i < couriers.size(); i++) {
+            builder.append(couriers.get(i) == null ? '-' : couriers.get(i)).append(" ");
         }
+        builder.append("\nnext insert index: " + nextInsertIndex);
+        builder.append("\nnext take index: " + nextTakeIndex + '\n');
         return builder.toString();
     }
 }

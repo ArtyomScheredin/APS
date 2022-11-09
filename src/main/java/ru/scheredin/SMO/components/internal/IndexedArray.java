@@ -1,14 +1,13 @@
 package ru.scheredin.SMO.components.internal;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.scheredin.SMO.components.Request;
+import ru.scheredin.SMO.stats.StepModeStats;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.TreeMap;
 
 public class IndexedArray implements Iterable<Request> {
@@ -27,7 +26,7 @@ public class IndexedArray implements Iterable<Request> {
         buffer = new ArrayList<>(capacity);
         for (int i = 0; i < capacity; i++) {
             buffer.add(null);
-        };
+        }
     }
 
     public void set(int index, Request request) {
@@ -45,10 +44,12 @@ public class IndexedArray implements Iterable<Request> {
         }
     }
 
-    public void rejectNewest() {
-        Integer newestIndex = indexes.pollFirstEntry().getValue();
+    public Request rejectNewest() {
+        Map.Entry<Request, Integer> entry = indexes.pollFirstEntry();
+        Integer newestIndex = entry.getValue();
         buffer.set(newestIndex, null);
         size--;
+        return entry.getKey();
     }
 
     public Request get(int index) {
@@ -63,15 +64,15 @@ public class IndexedArray implements Iterable<Request> {
         return (buffer.size() - size) == 0;
     }
 
-    public Itr iterator() {
-        return new Itr();
+    public Iterator iterator() {
+        return new Iterator();
     }
 
     public List<Request> getState() {
-        return Collections.unmodifiableList(buffer);
+        return buffer;
     }
 
-    private class Itr implements ListIterator<Request> {
+    public class Iterator implements ListIterator<Request> {
         private int cur;
         private int prev;
 
@@ -84,6 +85,7 @@ public class IndexedArray implements Iterable<Request> {
             prev = cur;
             cur = (cur == buffer.size() - 1) ? 0 : cur + 1;
             while ((request = buffer.get(prev)) == null) { //iterating over buffer
+                StepModeStats.INSTANCE().saveSnapshot("Finding request to take. Current index = " + cur);
                 prev = cur;
                 cur = (cur == buffer.size() - 1) ? 0 : cur + 1;
             }
@@ -103,9 +105,15 @@ public class IndexedArray implements Iterable<Request> {
         public void add(Request request) {
             while (buffer.get(prev) != null) { //iterating over buffer
                 prev = cur;
+                StepModeStats.INSTANCE().saveSnapshot("Finding place to insert. Next index = " + cur);
                 cur = (cur == buffer.size() - 1) ? 0 : cur + 1;
             }
             IndexedArray.this.set(prev, request);
+        }
+
+        @Override
+        public int nextIndex() {
+            return cur;
         }
 
         @Override
@@ -123,10 +131,6 @@ public class IndexedArray implements Iterable<Request> {
             throw new UnsupportedOperationException();
         }
 
-        @Override
-        public int nextIndex() {
-            throw new UnsupportedOperationException();
-        }
 
         @Override
         public int previousIndex() {

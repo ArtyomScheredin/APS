@@ -27,13 +27,16 @@ public class StepModeStats {
         snapshots = new ArrayList<>();
     }
 
-    public void saveSnapshot() {
+    public void saveSnapshot(String msg) {
         if (buyersPool == null | buffer == null | couriersPool == null) {
             return;
         }
-        Snapshot snapshot = new Snapshot(buyersPool.getState(),
-                buffer.getState(),
-                couriersPool.getState());
+        Snapshot snapshot = new Snapshot(buyersPool.getDump(),
+                buffer.getDump(),
+                couriersPool.getDump(),
+                buffer.getInsertPointer(),
+                buffer.getTakePointer(),
+                msg);
         snapshots.add(snapshot);
     }
 
