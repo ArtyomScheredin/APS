@@ -1,9 +1,9 @@
 package ru.scheredin.SMO.components.internal;
 
 
-import ru.scheredin.SMO.Orchestrator;
 import ru.scheredin.SMO.components.Request;
-import ru.scheredin.SMO.stats.StepModeStatsService;
+import ru.scheredin.SMO.services.ClockService;
+import ru.scheredin.SMO.services.SnapshotService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +16,8 @@ public class IndexedArray implements Iterable<Request> {
      * nullable circled array. Nulls == deleted requests
      */
     private final ArrayList<Request> buffer;
+    private SnapshotService snapshotService;
+    private ClockService clock;
     /**
      * non-clustered index for buffer to access Request in buffer with O(1) complexity
      * sorted by insertion date
@@ -23,8 +25,10 @@ public class IndexedArray implements Iterable<Request> {
     private final TreeMap<Request, Integer> indexes = new TreeMap<>();
     private int size;
 
-    public IndexedArray(int capacity) {
+    public IndexedArray(int capacity, SnapshotService stepModeStatsService, ClockService clock) {
         buffer = new ArrayList<>(capacity);
+        this.snapshotService = stepModeStatsService;
+        this.clock = clock;
         for (int i = 0; i < capacity; i++) {
             buffer.add(null);
         }
@@ -51,7 +55,7 @@ public class IndexedArray implements Iterable<Request> {
         buffer.set(newestIndex, null);
         size--;
         Request rejected = entry.getKey();
-        rejected.setBufferTookTime(Orchestrator.INSTANCE().getCurTime());
+        rejected.setBufferTookTime(clock.getTime());
         return rejected;
     }
 
@@ -84,7 +88,7 @@ public class IndexedArray implements Iterable<Request> {
             prev = cur;
             cur = (cur == buffer.size() - 1) ? 0 : cur + 1;
             while ((request = buffer.get(prev)) == null) { //iterating over buffer
-                StepModeStatsService.INSTANCE().saveSnapshot("Finding request to take. Current index = " + cur);
+                snapshotService.save("Finding request to take. Current index = " + cur);
                 prev = cur;
                 cur = (cur == buffer.size() - 1) ? 0 : cur + 1;
             }
@@ -104,7 +108,7 @@ public class IndexedArray implements Iterable<Request> {
         public void add(Request request) {
             while (buffer.get(prev) != null) { //iterating over buffer
                 prev = cur;
-                StepModeStatsService.INSTANCE().saveSnapshot("Finding place to insert. Next index = " + cur);
+                snapshotService.save("Finding place to insert. Next index = " + cur);
                 cur = (cur == buffer.size() - 1) ? 0 : cur + 1;
             }
             IndexedArray.this.set(prev, request);

@@ -1,27 +1,29 @@
-package ru.scheredin.SMO.stats;
+package ru.scheredin.SMO.services;
 
+import com.google.inject.Inject;
 import ru.scheredin.SMO.components.Buffer;
 import ru.scheredin.SMO.components.BuyersPool;
 import ru.scheredin.SMO.components.CouriersPool;
+import ru.scheredin.SMO.dto.Snapshot;
 
 import java.util.ArrayList;
 import java.util.ListIterator;
 
-public class StepModeStatsService {
+public class SnapshotService {
 
     private BuyersPool buyersPool;
     private Buffer buffer;
     private CouriersPool couriersPool;
 
     private ArrayList<Snapshot> snapshots;
-
-    private static StepModeStatsService instance;
+    @Inject
+    private ClockService clock;
 
 
 
     private boolean isReady = false;
 
-    public StepModeStatsService() {
+    public SnapshotService() {
     }
 
     public void init(BuyersPool buyersPool, Buffer buffer, CouriersPool couriersPool) {
@@ -46,7 +48,7 @@ public class StepModeStatsService {
         isReady = status;
     }
 
-    public void saveSnapshot(String msg) {
+    public void save(String msg) {
         if (buyersPool == null | buffer == null | couriersPool == null) {
             return;
         }
@@ -55,17 +57,10 @@ public class StepModeStatsService {
                 couriersPool.getDump(),
                 buffer.getInsertPointer(),
                 buffer.getTakePointer(),
-                msg);
+                msg,
+                                         clock.getTime());
         snapshots.add(snapshot);
     }
-
-    public static StepModeStatsService INSTANCE() {
-        if (instance == null) {
-            instance = new StepModeStatsService();
-        }
-        return instance;
-    }
-
     public ListIterator<Snapshot> iterator() {
         return snapshots.listIterator();
     }

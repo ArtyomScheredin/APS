@@ -1,4 +1,4 @@
-package ru.scheredin.SMO;
+package ru.scheredin.SMO.dto;
 
 public record Round(int buyersNumber,
                     int courierNumber,

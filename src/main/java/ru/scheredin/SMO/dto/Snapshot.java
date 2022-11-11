@@ -1,6 +1,6 @@
-package ru.scheredin.SMO.stats;
+package ru.scheredin.SMO.dto;
 
-import ru.scheredin.SMO.Orchestrator;
+import com.google.inject.name.Named;
 import ru.scheredin.SMO.components.Request;
 
 import java.util.List;
@@ -12,9 +12,7 @@ public record Snapshot(List<Request> buyers,
                        int nextTakeIndex,
                        String message,
                        double time) {
-    public Snapshot(List<Request> buyers, List<Request> buffer, List<Request> couriers, int nextInsertIndex, int nextTakeIndex, String message) {
-        this(buyers, buffer, couriers, nextInsertIndex, nextTakeIndex, message, Orchestrator.INSTANCE().getCurTime());
-    }
+
 
     @Override
     public String toString() {

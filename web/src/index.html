@@ -3,39 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="scss/style.css">
 </head>
 <body>
-<div id="errors" style="
-  background: #c00;
-  color: #fff;
-  display: none;
-  margin: -20px -20px 20px;
-  padding: 20px;
-  white-space: pre-wrap;
-"></div>
+<div class="header">
+    <h1>Header</h1>
+    <a href="https://www.google.com/" class="main-menu-link">new simulation</a>
+    <a href="https://www.google.com/" class="main-menu-link">automode results</a>
+    <a href="https://www.google.com/" class="main-menu-link">stepmode results</a>
+</div>
+<form>
+    <label for="buyersNumber">buyersNumber</label>
+    <input type="text" id="buyersNumber">
+    <label for="buyersNumber">courierNumber</label>
+    <input type="text" id="courierNumber">
+    <label for="buyersNumber">processingTime</label>
+    <input type="text" id="processingTime">
+    <label for="buyersNumber">bufferCapacity</label>
+    <input type="text" id="bufferCapacity">
+    <label for="buyersNumber">lambda</label>
+    <input type="text" id="lambda">
+    <label for="duration">lambda</label>
+    <input type="text" id="duration">
+    <input type="submit" id="submit_btn">
+</form>
+<!--<div class="snapshot">
+    <h2>time:message</h2>
+    <p class="info">dark blue border -> next place to take<br>red border -> next place to take</p>
+    <div class="smo">
+        <div class="array">
+            <h4>title</h4>
+            <div class="request">12</div>
+            <div class="request request_empty"></div>
+            <div class="request request_insert"></div>
+            <div class="request request_take"></div>
+        </div>
+        <div class="array">
+            <div class="request">12</div>
+            <div class="request request_empty"></div>
+            <div class="request request_insert"></div>
+        </div>
+        <div class="array">
+            <div class="request">12</div>
+            <div class="request request_empty"></div>
+            <div class="request request_insert"></div>
+        </div>
+    </div>-->
+<!--
+<div>
+    <table>
+        <caption>
+            Results for buyers
+        </caption>
+        <thead>
+        <tr>
+            <th>buyer</th>
+            <th>rej. probability</th>
+            <th>avg. time</th>
+            <th>avg. buffer time</th>
+            <th>avg. processing time</th>
+            <th>dispersion buffer time</th>
+            <th>dispersion processing time</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Alfreds Futterkiste</td>
+            <td>Maria Anders</td>
+            <td>Germany</td>
+            <td>Germany</td>
+            <td>Germany</td>
+            <td>Germany</td>
+            <td>Germany</td>
+        </tr>
+        <tr>
+            <td>Alfreds Futterkiste</td>
+            <td>Maria Anders</td>
+            <td>Germany</td>
+            <td>Germany</td>
+            <td>Germany</td>
+            <td>Germany</td>
+            <td>Germany</td>
+        </tr>
+        <tr>
+            <td>Alfreds Futterkiste</td>
+            <td>Maria Anders</td>
+            <td>Germany</td>
+            <td>Germany</td>
+            <td>Germany</td>
+            <td>Germany</td>
+            <td>Germany</td>
+        </tr>
+        <tr>
+            <td>Alfreds Futterkiste</td>
+            <td>Maria Anders</td>
+            <td>Germany</td>
+            <td>Germany</td>
+            <td>Germany</td>
+            <td>Germany</td>
+            <td>Germany</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+-->
 <div id="root"></div>
 <script>
-    window.addEventListener('mousedown', function(e) {
+    window.addEventListener('mousedown', function (e) {
         document.body.classList.add('mouse-navigation');
         document.body.classList.remove('kbd-navigation');
     });
-    window.addEventListener('keydown', function(e) {
+    window.addEventListener('keydown', function (e) {
         if (e.keyCode === 9) {
             document.body.classList.add('kbd-navigation');
             document.body.classList.remove('mouse-navigation');
         }
     });
-    window.addEventListener('click', function(e) {
+    window.addEventListener('click', function (e) {
         if (e.target.tagName === 'A' && e.target.getAttribute('href') === '#') {
             e.preventDefault();
         }
     });
-    window.onerror = function(message, source, line, col, error) {
+    window.onerror = function (message, source, line, col, error) {
         var text = error ? error.stack || error : message + ' (at ' + source + ':' + line + ':' + col + ')';
         errors.textContent += text + '\n';
         errors.style.display = '';
     };
-    console.error = (function(old) {
+    console.error = (function (old) {
         return function error() {
             errors.textContent += Array.prototype.slice.call(arguments).join(' ') + '\n';
             errors.style.display = '';

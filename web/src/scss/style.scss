@@ -1,0 +1,27 @@
+$primary: #FFFFFF;
+$secondary: #2A2F36;
+$accent-light: #d6e8f1;
+$accent: #A7E8F2;
+$accent-dark: #84cad2;
+$accent-bright: #a4aff7;
+$insert: #434dd5;
+$take: #ff5335;
+$text: #606268;
+
+@font-face {
+  font-family: ok_regular;
+  src: url(../fonts/ok_regular.otf);
+}
+
+@font-face {
+  font-family: ok_bold;
+  src: url(../fonts/ok_bold.otf);
+}
+body {
+  margin: 0;
+  font-family: ok_regular;
+}
+
+@import "main";
+@import "snapshot";
+@import "buyers-stats";

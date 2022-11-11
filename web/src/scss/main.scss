@@ -1,0 +1,52 @@
+
+.header {
+  margin: 0px;
+  padding: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  font-family: ok_bold;
+  background: $secondary;
+  flex-grow: 1;
+  height: 100px;
+
+  h1, a {
+    font-family: ok_regular;
+    margin: 30px;
+    color: $accent;
+  }
+}
+
+form {
+  margin: 10px;
+  margin-top: 30px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+
+  label {
+    font-family: ok_regular;
+  }
+
+  input {
+    border: 2px solid $accent-dark;
+    height: 20px;
+    border-radius: 5px;
+    margin: 3px;
+    background: $accent;
+  }
+
+  input[type="submit"] {
+    border: 0px solid $accent-dark;
+    font-family: ok_bold;
+    margin-top: 10px;
+    background: $accent;
+    height: 40px;
+    font-size: 18px;
+    border-radius: 5px;
+
+    &:hover {
+      background: $accent-light;
+    }
+  }
+}

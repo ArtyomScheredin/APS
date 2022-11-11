@@ -1,6 +1,8 @@
-package ru.scheredin.SMO.stats;
+package ru.scheredin.SMO.services;
 
 import ru.scheredin.SMO.components.Request;
+import ru.scheredin.SMO.dto.BuyerStats;
+import ru.scheredin.SMO.dto.CourierStats;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,8 +13,6 @@ public class AutoModeStatsService {
     private ArrayList<Double> couriersRestTime;
     private ArrayList<Double> couriersWorkTime;
     private int buyersNumber;
-
-    private static AutoModeStatsService instance;
     private boolean isReady = false;
 
     public AutoModeStatsService() {
@@ -140,12 +140,5 @@ public class AutoModeStatsService {
                     dispProcessingTime[i]));
         }
         return result;
-    }
-
-    public static AutoModeStatsService INSTANCE() {
-        if (instance == null) {
-            instance = new AutoModeStatsService();
-        }
-        return instance;
     }
 }

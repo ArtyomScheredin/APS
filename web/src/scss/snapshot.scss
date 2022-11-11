@@ -1,0 +1,55 @@
+.snapshot {
+  margin: 40px 10px 10px;
+  h2 {
+    margin-left: 30px;
+  }
+  .info {
+    margin-left: 30px;
+    font-size: 11px;
+    color: $text;
+  }
+  .smo {
+    display: flex;
+
+    .array {
+      width: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .request {
+      margin: 3px;
+      width: 50px;
+      background: $accent-bright;
+      height: 50px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+
+      &:after {
+        padding-bottom: 100%;
+      }
+    }
+
+    .request_empty {
+      background: $accent-light;
+    }
+
+    .request_insert {
+      border: 5px solid $insert;
+    }
+
+    .request_take {
+      border: 5px solid $take;
+    }
+}
+
+
+}
+
+
+

@@ -1,0 +1,128 @@
+@font-face {
+  font-family: ok_regular;
+  src: url(../fonts/ok_regular.otf);
+}
+@font-face {
+  font-family: ok_bold;
+  src: url(../fonts/ok_bold.otf);
+}
+body {
+  margin: 0;
+  font-family: ok_regular;
+}
+
+.header {
+  margin: 0px;
+  padding: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  font-family: ok_bold;
+  background: #2A2F36;
+  flex-grow: 1;
+  height: 100px;
+}
+.header h1, .header a {
+  font-family: ok_regular;
+  margin: 30px;
+  color: #A7E8F2;
+}
+
+form {
+  margin: 10px;
+  margin-top: 30px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+}
+form label {
+  font-family: ok_regular;
+}
+form input {
+  border: 2px solid #84cad2;
+  height: 20px;
+  border-radius: 5px;
+  margin: 3px;
+  background: #A7E8F2;
+}
+form input[type=submit] {
+  border: 0px solid #84cad2;
+  font-family: ok_bold;
+  margin-top: 10px;
+  background: #A7E8F2;
+  height: 40px;
+  font-size: 18px;
+  border-radius: 5px;
+}
+form input[type=submit]:hover {
+  background: #d6e8f1;
+}
+
+.snapshot {
+  margin: 40px 10px 10px;
+}
+.snapshot h2 {
+  margin-left: 30px;
+}
+.snapshot .info {
+  margin-left: 30px;
+  font-size: 11px;
+  color: #606268;
+}
+.snapshot .smo {
+  display: flex;
+}
+.snapshot .smo .array {
+  width: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.snapshot .smo .request {
+  margin: 3px;
+  width: 50px;
+  background: #a4aff7;
+  height: 50px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.snapshot .smo .request:after {
+  padding-bottom: 100%;
+}
+.snapshot .smo .request_empty {
+  background: #d6e8f1;
+}
+.snapshot .smo .request_insert {
+  border: 5px solid #434dd5;
+}
+.snapshot .smo .request_take {
+  border: 5px solid #ff5335;
+}
+
+table {
+  border: 0;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+table caption {
+  font-family: ok_bold;
+  font-size: 20px;
+  margin: 10px;
+}
+table thead {
+  background: #a4aff7;
+}
+table tbody tr {
+  background: #d6e8f1;
+}
+table tbody tr:nth-child(even) {
+  background: #FFFFFF;
+}
+table td, table th {
+  padding: 5px;
+}
+
+/*# sourceMappingURL=style.css.map */

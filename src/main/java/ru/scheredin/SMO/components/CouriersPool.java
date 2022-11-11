@@ -1,5 +1,10 @@
 package ru.scheredin.SMO.components;
 
+import ru.scheredin.SMO.services.AutoModeStatsService;
+import ru.scheredin.SMO.services.ClockService;
+import ru.scheredin.SMO.services.OrchestratorService;
+import ru.scheredin.SMO.services.SnapshotService;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -10,10 +15,11 @@ public class CouriersPool implements Dumpable {
 
     public CouriersPool(int couriersNumber,
                         double processingTime,
-                        Buffer buffer) {
+                        Buffer buffer, AutoModeStatsService autoModeStatsService, SnapshotService snapshotService,
+                        ClockService clock, OrchestratorService orchestratorService) {
         couriers = new ArrayList<>(couriersNumber);
         for (int index = 0; index < couriersNumber; index++) {
-            couriers.add(new Courier(index, processingTime, buffer));
+            couriers.add(new Courier(index, processingTime, buffer, snapshotService, autoModeStatsService, clock, orchestratorService));
         }
     }
 

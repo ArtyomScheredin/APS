@@ -1,9 +1,10 @@
 package ru.scheredin.SMO.components;
 
 
-import ru.scheredin.SMO.Orchestrator;
-import ru.scheredin.SMO.stats.AutoModeStatsService;
-import ru.scheredin.SMO.stats.StepModeStatsService;
+import ru.scheredin.SMO.services.OrchestratorService;
+import ru.scheredin.SMO.services.AutoModeStatsService;
+import ru.scheredin.SMO.services.ClockService;
+import ru.scheredin.SMO.services.SnapshotService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,14 +17,22 @@ public class BuyersPool implements Dumpable {
     private double endTime;
     private final Buffer buffer;
     private final CouriersPool couriersPool;
+    private AutoModeStatsService autoModeStatsService;
+    private SnapshotService snapshotService;
+    private ClockService clock;
     private ArrayList<Request> state;
 
-    public BuyersPool(int buyersNumber, double lambda, double duration, Buffer buffer, CouriersPool couriersPool) {
+    public BuyersPool(int buyersNumber, double lambda, double duration, Buffer buffer, CouriersPool couriersPool,
+                      AutoModeStatsService autoModeStatsService, SnapshotService stepModeStatsService,
+                      ClockService clock) {
         this.buyersNumber = buyersNumber;
         this.lambda = lambda;
-        this.endTime = Orchestrator.INSTANCE().getCurTime() + duration;
+        this.endTime = clock.getTime() + duration;
         this.buffer = buffer;
         this.couriersPool = couriersPool;
+        this.autoModeStatsService = autoModeStatsService;
+        this.snapshotService = stepModeStatsService;
+        this.clock = clock;
         Request[] requests = new Request[buyersNumber];
         Arrays.fill(requests, null);
         state = new ArrayList<>(Arrays.asList(requests));
@@ -38,15 +47,15 @@ public class BuyersPool implements Dumpable {
                 final int serial = requestSerial++;
                 actions.put(time, () -> {
                     Request request = new Request(curBuyer, serial);
-                    AutoModeStatsService.INSTANCE().save(request);
-                    request.setBufferInsertedTime(Orchestrator.INSTANCE().getCurTime());
+                    autoModeStatsService.save(request);
+                    request.setBufferInsertedTime(clock.getTime());
 
                     state.set(curBuyer, request);
-                    StepModeStatsService.INSTANCE().saveSnapshot("Created request " + request);
+                    snapshotService.save("Created request " + request);
 
                     buffer.insert(request);
                     state.set(curBuyer, null);
-                    StepModeStatsService.INSTANCE().saveSnapshot("Inserted request " + request);
+                    snapshotService.save("Inserted request " + request);
                     couriersPool.notifyNewRequest();
                 });
             }

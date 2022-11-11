@@ -1,24 +1,35 @@
 package ru.scheredin.SMO.components;
 
-import ru.scheredin.SMO.Orchestrator;
-import ru.scheredin.SMO.stats.AutoModeStatsService;
-import ru.scheredin.SMO.stats.StepModeStatsService;
+import ru.scheredin.SMO.services.ClockService;
+import ru.scheredin.SMO.services.OrchestratorService;
+import ru.scheredin.SMO.services.AutoModeStatsService;
+import ru.scheredin.SMO.services.SnapshotService;
 
 public class Courier {
     private State state = State.FREE;
     private Double changeStateTime;
+    private OrchestratorService orchestratorService;
     private Request request;
 
     private final int index;
     private final double processingTime;
     private final Buffer buffer;
+    private SnapshotService snapshotService;
+    private AutoModeStatsService autoModeStatsService;
+    private ClockService clock;
 
 
-    public Courier(int index, double processingTime, Buffer buffer) {
+    public Courier(int index, double processingTime, Buffer buffer, SnapshotService snapshotService,
+                   AutoModeStatsService autoModeStatsService, ClockService clock,
+                   OrchestratorService orchestratorService) {
         this.index = index;
         this.processingTime = processingTime;
         this.buffer = buffer;
-        changeStateTime = Orchestrator.INSTANCE().getCurTime();
+        this.snapshotService = snapshotService;
+        this.autoModeStatsService = autoModeStatsService;
+        this.clock = clock;
+        changeStateTime = clock.getTime();
+        this.orchestratorService = orchestratorService;
     }
 
     public boolean isFree() {
@@ -31,37 +42,37 @@ public class Courier {
         }
         changeState(State.WORKING);
 
-        Orchestrator.INSTANCE().addAction(Orchestrator.INSTANCE().getCurTime(), this::startTask);
+        orchestratorService.addAction(clock.getTime(), this::startTask);
     }
 
     private void startTask() {
         request = buffer.take();
-        request.setBufferTookTime(Orchestrator.INSTANCE().getCurTime());
-        StepModeStatsService.INSTANCE().saveSnapshot("Took request " + request);
-        Orchestrator.INSTANCE().addAction(Orchestrator.INSTANCE().getCurTime() + processingTime, this::finishTask);
+        request.setBufferTookTime(clock.getTime());
+        snapshotService.save("Took request " + request);
+        orchestratorService.addAction(clock.getTime() + processingTime, this::finishTask);
     }
 
     private void finishTask() {
-        request.setCompletionTime(Orchestrator.INSTANCE().getCurTime());
+        request.setCompletionTime(clock.getTime());
         request = null;
 
-        StepModeStatsService.INSTANCE().saveSnapshot("Completed request " + request);
+        snapshotService.save("Completed request " + request);
         if (buffer.isEmpty()) {
             changeState(State.FREE);
         } else {
-            Orchestrator.INSTANCE().addAction(Orchestrator.INSTANCE().getCurTime(), this::startTask);
+            orchestratorService.addAction(clock.getTime(), this::startTask);
         }
     }
 
     private void changeState(State newState) {
         state = newState;
-        double duration = Orchestrator.INSTANCE().getCurTime() - changeStateTime;
+        double duration = clock.getTime() - changeStateTime;
         if (newState.equals(State.FREE)) {
-            AutoModeStatsService.INSTANCE().notifyWorkEnded(index, duration);
+            autoModeStatsService.notifyWorkEnded(index, duration);
         } else {
-            AutoModeStatsService.INSTANCE().notifyRestEnded(index, duration);
+            autoModeStatsService.notifyRestEnded(index, duration);
         }
-        changeStateTime = Orchestrator.INSTANCE().getCurTime();
+        changeStateTime = clock.getTime();
     }
 
     @Override
