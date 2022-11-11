@@ -1,5 +1,7 @@
-import res from "./buyers-stats-data.json";
+import result from "./buyers-stats-data.json";
 import Header from "./header";
+
+
 
 const tableTypes = ["buyer", "rej. probability", "avg. time", "avg. buffer time",
     "avg. processing time", "dispersion buffer time", "dispersion processing time"]
@@ -15,12 +17,10 @@ const TableHeader = () => <>
 
 const TableContents = ({result}) => <>
     <tbody>
-    {res.map(buyer =>
+    {
+        result.map(buyer =>
         <tr>
-            {buyer.map(e =>
-                <td>
-                    {e.value()}
-                </td>)}
+            {buyer.index}
         </tr>)}
     </tbody>
 </>
@@ -29,7 +29,7 @@ const BuyerStatsPage = () => <>
     <Header/>
     <table>
         <TableHeader/>
-        <TableContents result={res}/>
+        <TableContents result={result}/>
     </table>
 </>
 
