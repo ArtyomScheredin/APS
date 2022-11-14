@@ -10,6 +10,36 @@ body {
   margin: 0;
   font-family: ok_regular;
 }
+body button {
+  box-shadow: 0px 10px 14px -7px #a4aff7;
+  background: linear-gradient(to bottom, #d6e8f1 5%, #A7E8F2 100%);
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  color: black;
+  font-size: 20px;
+  padding: 15px 24px;
+  margin: 5px;
+}
+body button:hover {
+  background: linear-gradient(to bottom, #A7E8F2 5%, #84cad2 100%);
+  box-shadow: 0px 5px 24px -7px #a4aff7;
+}
+body button:active {
+  position: relative;
+  top: 1px;
+}
+body textarea {
+  font-family: ok_regular;
+  resize: block;
+  border-radius: 10px;
+  display: flex;
+  text-align: center;
+  font-size: 41px;
+  width: 120px;
+  height: 50px;
+  overflow: auto;
+}
 
 .header {
   margin: 0px;
@@ -22,10 +52,19 @@ body {
   flex-grow: 1;
   height: 100px;
 }
-.header h1, .header a {
+.header h1 {
+  margin: 50px;
+  font-size: 21px;
+  width: 160px;
+  color: #A7E8F2;
+}
+.header h4 * {
   font-family: ok_regular;
   margin: 30px;
   color: #A7E8F2;
+}
+.header h4:hover * {
+  cursor: pointer;
 }
 
 form {
@@ -61,16 +100,38 @@ form input[type=submit]:hover {
 .snapshot {
   margin: 40px 10px 10px;
 }
-.snapshot h2 {
-  margin-left: 30px;
+.snapshot h2, .snapshot h3 {
+  margin: 0px 0px 0px 30px;
+}
+.snapshot .snapshot__header {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: row;
+  align-items: start;
 }
 .snapshot .info {
-  margin-left: 30px;
+  margin: 0 0 0 50px;
   font-size: 11px;
   color: #606268;
+  padding: 0;
+  text-indent: 0;
+}
+.snapshot .control-panel {
+  margin-left: 40px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: fit-content;
+  justify-content: space-between;
+}
+.snapshot .control-panel h1 {
+  margin: 15px;
 }
 .snapshot .smo {
   display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: start;
 }
 .snapshot .smo .array {
   width: 120px;
@@ -92,20 +153,28 @@ form input[type=submit]:hover {
 .snapshot .smo .request:after {
   padding-bottom: 100%;
 }
+.snapshot .smo .request_insert.request_take {
+  border: 5px solid #434dd5;
+  outline: 5px solid #ff5335;
+}
 .snapshot .smo .request_empty {
   background: #d6e8f1;
 }
 .snapshot .smo .request_insert {
   border: 5px solid #434dd5;
+  outline-width: 0;
 }
 .snapshot .smo .request_take {
   border: 5px solid #ff5335;
+  outline-width: 0;
 }
 
 table {
   border: 0;
   border-collapse: collapse;
   font-size: 14px;
+  border: 3px solid #a4aff7;
+  margin: 25px;
 }
 table caption {
   font-family: ok_bold;
@@ -117,12 +186,31 @@ table thead {
 }
 table tbody tr {
   background: #d6e8f1;
+  width: 0;
 }
 table tbody tr:nth-child(even) {
   background: #FFFFFF;
 }
 table td, table th {
   padding: 5px;
+}
+
+.info {
+  margin: 35px;
+  text-indent: 25px;
+}
+.info h1 {
+  font-family: ok_bold;
+}
+.info li {
+  margin-top: 10px;
+}
+
+.stub {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 50px;
 }
 
 /*# sourceMappingURL=style.css.map */

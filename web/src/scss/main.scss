@@ -10,10 +10,20 @@
   flex-grow: 1;
   height: 100px;
 
-  h1, a {
+  h1 {
+    margin: 50px;
+    font-size: 21px;
+    width: 160px;
+    color: $accent;
+  }
+  h4 * {
     font-family: ok_regular;
     margin: 30px;
     color: $accent;
+  }
+
+  h4:hover * {
+    cursor: pointer;
   }
 }
 

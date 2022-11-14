@@ -1,0 +1,29 @@
+
+table {
+  border: 0;
+  border-collapse: collapse;
+  font-size: 14px;
+  border: 3px solid $accent-bright;
+  margin: 25px;
+
+  caption {
+    font-family: ok_bold;
+    font-size: 20px;
+    margin: 10px;
+  }
+  thead {
+    background: $accent-bright;
+  }
+  tbody tr {
+    background: $accent-light;
+    width: 0;
+    &:nth-child(even) {
+      background: $primary;
+    }
+  }
+  td, th {
+    padding:5px;
+  }
+}
+
+

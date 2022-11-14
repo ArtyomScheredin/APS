@@ -1,0 +1,50 @@
+{
+  "buyers": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "buffer": [
+    null,
+    null,
+    {
+      "buyerNumber": 0,
+      "serial": 2,
+      "bufferInsertedTime": 0.21662122489406033,
+      "bufferTookTime": 0.21662122489406033,
+      "completionTime": 0.3166212248940603
+    },
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "couriers": [
+    {
+      "buyerNumber": 4,
+      "serial": 150,
+      "bufferInsertedTime": 0.18309051559454875,
+      "bufferTookTime": 0.2,
+      "completionTime": 0.30000000000000004
+    },
+    {
+      "buyerNumber": 4,
+      "serial": 151,
+      "bufferInsertedTime": 0.2078117860717363,
+      "bufferTookTime": 0.2078117860717363,
+      "completionTime": 0.3078117860717363
+    },
+    null,
+    null,
+    null
+  ],
+  "nextInsertIndex": 3,
+  "nextTakeIndex": 7,
+  "message": "Finding request to take. Current index = 7",
+  "time": 0.217
+}

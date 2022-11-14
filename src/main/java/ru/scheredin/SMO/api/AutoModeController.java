@@ -17,7 +17,10 @@ public class AutoModeController {
     @Inject
     private AutoModeStatsService autoModeStatsService;
 
-    @Path("/result/couriers")
+    @Inject
+    private ObjectMapper objectMapper;
+
+    @Path("/couriers")
     @RequestMethod(Request.METHOD_GET)
     public Response handleGetCourier() throws JsonProcessingException {
         if (!autoModeStatsService.isReady()) {
@@ -25,19 +28,23 @@ public class AutoModeController {
         }
         List<CourierStats> courierResults = autoModeStatsService.getCourierResults();
         String result = new ObjectMapper().writeValueAsString(courierResults);
-        return Response.json(result);
+        Response response = new Response(Response.OK, result.getBytes());
+        response.addHeader("Content-Type: application/json; charset=utf-8");
+        response.addHeader("Access-Control-Allow-Origin: *");
+        return response;
     }
 
-    @Path("/result/buyers")
+    @Path("/buyers")
     @RequestMethod(Request.METHOD_GET)
     public Response handleGetBuyer() throws JsonProcessingException {
         if (!autoModeStatsService.isReady()) {
             return new Response(Response.NOT_FOUND, Response.EMPTY);
         }
         List<BuyerStats> buyersResults = autoModeStatsService.getBuyersResults();
-        String result = new ObjectMapper().writeValueAsString(buyersResults);
+        String result = objectMapper.writeValueAsString(buyersResults);
         Response response = new Response(Response.OK, result.getBytes());
         response.addHeader("Content-Type: application/json; charset=utf-8");
+        response.addHeader("Access-Control-Allow-Origin: *");
         return response;
     }
 }

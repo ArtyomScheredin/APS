@@ -1,7 +1,7 @@
 package ru.scheredin.SMO.components;
 
 
-import ru.scheredin.SMO.services.OrchestratorService;
+import ru.scheredin.SMO.dto.Request;
 import ru.scheredin.SMO.services.AutoModeStatsService;
 import ru.scheredin.SMO.services.ClockService;
 import ru.scheredin.SMO.services.SnapshotService;

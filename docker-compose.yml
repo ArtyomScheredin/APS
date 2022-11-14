@@ -1,0 +1,12 @@
+version: "3"
+services:
+  api:
+    build: ./web
+    ports:
+      - "3000:3000"
+    container_name: aps_one-nio_backend
+  client:
+    build: .
+    ports:
+      - "19666:19666"
+    container_name: aps_react_client

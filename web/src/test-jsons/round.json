@@ -1,0 +1,8 @@
+{
+  "buyersNumber": 5,
+  "courierNumber": 5,
+  "processingTime": 0.1,
+  "bufferCapacity": 10,
+  "lambda": 12.0,
+  "duration": 3.0
+}

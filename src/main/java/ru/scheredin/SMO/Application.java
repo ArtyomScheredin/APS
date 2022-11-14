@@ -1,9 +1,13 @@
 package ru.scheredin.SMO;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import one.nio.http.HttpServer;
 import one.nio.http.HttpServerConfig;
+import one.nio.http.HttpSession;
+import one.nio.http.Request;
+import one.nio.http.Response;
 import one.nio.server.AcceptorConfig;
 import ru.scheredin.SMO.api.AutoModeController;
 import ru.scheredin.SMO.api.MainController;
@@ -26,20 +30,33 @@ public final class Application {
     public static void main(String[] args) throws IOException {
         int port = 19666;
         String url = "http://localhost:" + port;
-        Round round = new Round(5, 5, 0.1, 10, 12, 3);
 
         Injector injector = Guice.createInjector(new Config());
         OrchestratorService orchestrator = injector.getInstance(OrchestratorService.class);
         MainController mainController = injector.getInstance(MainController.class);
         StepModeController stepModeController = injector.getInstance(StepModeController.class);
         AutoModeController autoModeController = injector.getInstance(AutoModeController.class);
+        HttpServer server = new HttpServer(configFromPort(port)){
+            @Override
+            public void handleDefault(Request request, HttpSession session) throws IOException {
+                //For CORS issues
+                 if (request.getMethod() == Request.METHOD_OPTIONS) {
+                    Response response = new Response(Response.ACCEPTED, Response.EMPTY);
+                    response.addHeader("Access-Control-Allow-Origin: *");
+                    response.addHeader("Access-Control-Allow-Headers: *");
+                    response.addHeader("Access-Control-Allow-Methods: GET, OPTIONS, HEAD, PUT, POST");
+                    session.sendResponse(response);
+                    return;
+                }
+                super.handleDefault(request, session);
+            }
 
-        orchestrator.runRound(round);
-        HttpServer server = new HttpServer(configFromPort(port));
+        };
         server.addRequestHandlers(mainController);
         server.addRequestHandlers(stepModeController);
         server.addRequestHandlers(autoModeController);
         server.start();
+        System.out.println("APS_SMO-server started on port 19666");
     }
 
     private static HttpServerConfig configFromPort(int port) {
@@ -63,7 +80,7 @@ public final class Application {
         Iterator<Snapshot> iterator = snapshotService.iterator();
         try (Scanner scanner = new Scanner(new InputStreamReader(System.in))) {
             //for (int i = 0; i < 50; i++) {
-             //   iterator.next();
+            //   iterator.next();
             //}
             while (iterator.hasNext()) {
                 //scanner.next();

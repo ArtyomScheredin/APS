@@ -3,6 +3,7 @@ package ru.scheredin.SMO.api;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
+import one.nio.http.HttpSession;
 import one.nio.http.Param;
 import one.nio.http.Path;
 import one.nio.http.Request;
@@ -16,17 +17,24 @@ public class StepModeController {
     @Inject
     private SnapshotService snapshotService;
 
+    @Inject
+    private ObjectMapper objectMapper;
+
     @Path("/snapshot")
     @RequestMethod(Request.METHOD_GET)
-    public Response handleGet(@Param(value = "id=", required = true) int id) throws JsonProcessingException {
+    public Response handleGet(@Param(value = "id=", required = true) int id,Request request,
+                              HttpSession session) throws JsonProcessingException {
         if (!snapshotService.isReady()
                 || (id < 0)
                 || (id > snapshotService.getSnapshots().size())) {
             return new Response(Response.NOT_FOUND, Response.EMPTY);
         }
         Snapshot snapshot = snapshotService.getSnapshots().get(id);
-        String result = new ObjectMapper().writeValueAsString(snapshot); //маппим через джексон,
+        String result = objectMapper.writeValueAsString(snapshot); //маппим через джексон,
         // потому one-nio не завезли нормальную работу с json
-        return Response.json(result);
+        Response response = new Response(Response.OK, result.getBytes());
+        response.addHeader("Content-Type: application/json; charset=utf-8");
+        response.addHeader("Access-Control-Allow-Origin: *");
+        return response;
     }
 }

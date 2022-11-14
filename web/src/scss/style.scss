@@ -17,11 +17,44 @@ $text: #606268;
   font-family: ok_bold;
   src: url(../fonts/ok_bold.otf);
 }
+
 body {
   margin: 0;
   font-family: ok_regular;
+  button {
+    box-shadow: 0px 10px 14px -7px $accent-bright;
+    background:linear-gradient(to bottom, $accent-light 5%, $accent 100%);
+    border: 0;
+    border-radius:8px;
+    cursor:pointer;
+    color: black;
+    font-size:20px;
+    padding:15px 24px;
+    margin: 5px;
+    &:hover {
+      background:linear-gradient(to bottom, $accent 5%, $accent-dark 100%);
+      box-shadow: 0px 5px 24px -7px $accent-bright;
+    }
+    &:active{
+      position:relative;
+      top:1px;
+    }
+  }
+  textarea {
+    font-family: ok_regular;
+    resize: block;
+    border-radius: 10px;
+    display: flex;
+    text-align: center;
+    font-size:41px;
+    width: 120px;
+    height: 50px;
+    overflow: auto;
+  }
 }
 
 @import "main";
 @import "snapshot";
-@import "buyers-stats";
+@import "table";
+@import "info";
+@import "stub";

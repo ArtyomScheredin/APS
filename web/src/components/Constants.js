@@ -1,0 +1,6 @@
+export const MAIN_URL = "http://localhost:19666"
+export const START_ROUND_URL = "/start-round"
+export const COURIERS_URL = "/couriers"
+export const BUYERS_URL = "/buyers"
+export const SNAPSHOT_URL = "/snapshot"
+export const INFO_URL = "/info"

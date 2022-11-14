@@ -1,70 +1,44 @@
 package ru.scheredin.SMO.api;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.google.inject.Inject;
+import one.nio.http.HttpSession;
 import one.nio.http.Param;
 import one.nio.http.Path;
 import one.nio.http.Request;
 import one.nio.http.RequestMethod;
 import one.nio.http.Response;
+import one.nio.net.Session;
 import ru.scheredin.SMO.services.OrchestratorService;
 import ru.scheredin.SMO.dto.Round;
 
+import java.io.IOException;
+
 public class MainController {
     @Inject
-    OrchestratorService orchestrator;
+    private OrchestratorService orchestrator;
+    @Inject
+    private ObjectMapper objectMapper;
 
     @Path("/start-round")
-    @RequestMethod(Request.METHOD_POST)
-    public Response handleGetBuyer(
-            @Param(value = "buyersNumber", required = true) String rawBuyersNumber,
-            @Param(value = "courierNumber", required = true) String rawCourierNumber,
-            @Param(value = "processingTime", required = true) String rawProcessingTime,
-            @Param(value = "processingTime", required = true) String rawBufferCapacity,
-            @Param(value = "lambda", required = true) String rawLambda,
-            @Param(value = "duration", required = true) String rawDuration
-    ) throws JsonProcessingException {
-        int buyersNumber;
-        int courierNumber;
-        double processingTime;
-        int bufferCapacity;
-        double lambda;
-        double duration;
+    @RequestMethod(Request.METHOD_PUT)
+    public Response handleStartRound(Request request) throws IOException {
+        Round round;
         try {
-            buyersNumber = Integer.parseInt(rawBuyersNumber);
-            courierNumber = Integer.parseInt(rawCourierNumber);
-            processingTime = Double.parseDouble(rawProcessingTime);
-            bufferCapacity = Integer.parseInt(rawBufferCapacity);
-            lambda = Double.parseDouble(rawLambda);
-            duration = Double.parseDouble(rawDuration);
-        } catch (NumberFormatException e) {
-            return new Response(Response.BAD_REQUEST, Response.EMPTY);
+            round = objectMapper.readValue(request.getBody(), Round.class);
+        } catch (JsonParseException | MismatchedInputException e) {
+            return new Response(Response.BAD_REQUEST, "incorrect body".getBytes());
         }
-        if (isBadParameters(buyersNumber,
-                            courierNumber,
-                            processingTime,
-                            bufferCapacity,
-                            lambda,
-                            duration)) {
-            return new Response(Response.BAD_REQUEST, Response.EMPTY);
-        }
-        Round round = new Round(buyersNumber, courierNumber, processingTime, bufferCapacity, lambda, duration);
         orchestrator.runRound(round);
-        return Response.ok(Response.EMPTY);
+        Response response = Response.ok(Response.EMPTY);
+        response.addHeader("Access-Control-Allow-Origin: *");
+        response.addHeader("Access-Control-Allow-Methods: GET, OPTIONS, HEAD, PUT, POST");
+        return response;
     }
 
-    private static boolean isBadParameters(int buyersNumber,
-                                           int courierNumber,
-                                           double processingTime,
-                                           int bufferCapacity,
-                                           double lambda,
-                                           double duration) {
-        if ((buyersNumber < 0) | (courierNumber < 0) | (processingTime < 0)
-                | (bufferCapacity < 0) | (lambda < 0) | (duration < 0)) {
-            return true;
-        }
-        return false;
-    }
 }
 
 

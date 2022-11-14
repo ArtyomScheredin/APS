@@ -1,6 +1,8 @@
 package ru.scheredin.SMO.services;
 
 import com.google.inject.Inject;
+import ru.scheredin.SMO.dto.BuyerStats;
+import ru.scheredin.SMO.dto.CourierStats;
 import ru.scheredin.SMO.dto.Round;
 import ru.scheredin.SMO.components.Buffer;
 import ru.scheredin.SMO.components.BuyersPool;
@@ -19,6 +21,7 @@ public class OrchestratorService {
     private ClockService clock;
 
     public void runRound(Round round) {
+        CourierStats courierStats = new CourierStats(1, 2);
         Buffer buffer = new Buffer(round.bufferCapacity(),
                 snapshotService,
                 clock);

@@ -1,6 +1,7 @@
 package ru.scheredin.SMO.components;
 
 import ru.scheredin.SMO.components.internal.IndexedArray;
+import ru.scheredin.SMO.dto.Request;
 import ru.scheredin.SMO.services.ClockService;
 import ru.scheredin.SMO.services.SnapshotService;
 

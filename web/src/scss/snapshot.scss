@@ -1,15 +1,42 @@
 .snapshot {
   margin: 40px 10px 10px;
-  h2 {
-    margin-left: 30px;
+
+  h2, h3 {
+    margin: 0px 0px 0px 30px;
   }
+
+  .snapshot__header {
+    margin-top:40px;
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+  }
+
   .info {
-    margin-left: 30px;
+    margin: 0 0 0 50px;
     font-size: 11px;
     color: $text;
+    padding: 0;
+    text-indent: 0;
   }
+  .control-panel {
+    margin-left:40px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: fit-content;
+    justify-content: space-between;
+    h1 {
+    margin: 15px;
+    }
+  }
+
+
   .smo {
     display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: start;
 
     .array {
       width: 120px;
@@ -35,19 +62,27 @@
       }
     }
 
+    .request_insert.request_take {
+      border: 5px solid $insert;
+      outline: 5px solid $take;
+    }
+
     .request_empty {
       background: $accent-light;
     }
 
     .request_insert {
       border: 5px solid $insert;
+      outline-width: 0;
     }
 
     .request_take {
       border: 5px solid $take;
+      outline-width: 0;
     }
-}
 
+
+  }
 
 }
 

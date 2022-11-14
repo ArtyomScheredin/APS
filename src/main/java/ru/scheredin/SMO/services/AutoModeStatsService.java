@@ -1,6 +1,6 @@
 package ru.scheredin.SMO.services;
 
-import ru.scheredin.SMO.components.Request;
+import ru.scheredin.SMO.dto.Request;
 import ru.scheredin.SMO.dto.BuyerStats;
 import ru.scheredin.SMO.dto.CourierStats;
 
@@ -88,7 +88,7 @@ public class AutoModeStatsService {
         Arrays.fill(processTime, 0);
         for (Request request : requests) { //Counting requests, overall buffer
             // and process time and number of completed requests
-            int buyer = request.getBuyer();
+            int buyer = request.getBuyerNumber();
             requestsCount[buyer]++;
 
             if (request.getCompletionTime() != null) {
@@ -110,7 +110,7 @@ public class AutoModeStatsService {
         Arrays.fill(dispProcessingTime, 0);
         Arrays.fill(dispBufferTime, 0);
         for (Request request : requests) {   //Calculating dispersion  disp = (sum(x_avg - x_i)^2) /n
-            int buyer = request.getBuyer();
+            int buyer = request.getBuyerNumber();
             dispBufferTime[buyer] += Math.pow(avgBufferTime[buyer]
                     + request.getBufferInsertedTime()
                     - request.getBufferTookTime(), 2);
