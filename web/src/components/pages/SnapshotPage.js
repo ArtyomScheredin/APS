@@ -114,10 +114,12 @@ const SnapshotPage = () => {
                 </div>
                 <div className="smo">
                     <RequestArray requests={snapshot.buyers} title="buyers"></RequestArray>
+                    <RequestArray requests={[null]} title="seller"></RequestArray>
                     <RequestArray requests={snapshot.buffer} title="buffer"
                                   insertIndex={snapshot.nextInsertIndex}
                                   takeIndex={snapshot.nextTakeIndex}
                     ></RequestArray>
+                    <RequestArray requests={[null]} title="logistian"></RequestArray>
                     <RequestArray requests={snapshot.couriers} title="couriers"></RequestArray>
                 </div>
             </>}
