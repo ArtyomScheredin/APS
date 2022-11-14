@@ -40,13 +40,11 @@ public class BuyersPool implements Dumpable {
 
     public TreeMap<Double, Runnable> generateActions() {
         TreeMap<Double, Runnable> actions = new TreeMap<>();
-        int requestSerial = 0;
         for (int buyer = 0; buyer < buyersNumber; buyer++) {
             int curBuyer = buyer;
             for (double time = 0; time < endTime; time += getPuassonInterval()) {
-                final int serial = requestSerial++;
                 actions.put(time, () -> {
-                    Request request = new Request(curBuyer, serial);
+                    Request request = new Request(curBuyer);
                     autoModeStatsService.save(request);
                     request.setBufferInsertedTime(clock.getTime());
 

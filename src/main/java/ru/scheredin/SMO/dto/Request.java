@@ -15,8 +15,11 @@ public final class Request implements Comparable<Request> {
     private Double completionTime;
 
 
-    public Request(int buyerNumber, int serial) {
+    public Request(int buyerNumber) {
         this.buyerNumber = buyerNumber;
+    }
+
+    public void setSerial(int serial) {
         this.serial = serial;
     }
 

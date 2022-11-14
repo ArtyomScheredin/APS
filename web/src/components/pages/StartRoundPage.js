@@ -43,7 +43,6 @@ const StartRoundPage = ({setTab}) => {
             navigate('/snapshot?id=0')
         })
             .catch(r => {
-                console.log(r)
                 alert(`error: ${r}`)
             })
 

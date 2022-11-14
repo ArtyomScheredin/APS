@@ -14,6 +14,7 @@ public class AutoModeStatsService {
     private ArrayList<Double> couriersWorkTime;
     private int buyersNumber;
     private boolean isReady = false;
+    private int requestSerial = 1;
 
     public AutoModeStatsService() {
     }
@@ -33,6 +34,7 @@ public class AutoModeStatsService {
         couriersRestTime = null;
         couriersRestTime = null;
         isReady = false;
+        requestSerial = 1;
     }
 
     public boolean isReady() {
@@ -44,6 +46,7 @@ public class AutoModeStatsService {
     }
 
     public void save(Request request) {
+        request.setSerial(requestSerial++);
         requests.add(request);
     }
 
