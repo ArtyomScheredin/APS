@@ -114,13 +114,13 @@ public class AutoModeStatsService {
         Arrays.fill(dispBufferTime, 0);
         for (Request request : requests) {   //Calculating dispersion  disp = (sum(x_avg - x_i)^2) /n
             int buyer = request.getBuyerNumber();
-            dispBufferTime[buyer] += Math.pow(avgBufferTime[buyer]
-                    + request.getBufferInsertedTime()
-                    - request.getBufferTookTime(), 2);
+            dispBufferTime[buyer] += Math.pow(-avgBufferTime[buyer]
+                    - request.getBufferInsertedTime()
+                    + request.getBufferTookTime(), 2);
             if (request.getCompletionTime() != null) {
-                dispProcessingTime[buyer] += Math.pow(avgBufferTime[buyer]
-                        + request.getBufferTookTime()
-                        - request.getCompletionTime(), 2);
+                dispProcessingTime[buyer] += Math.pow(-avgBufferTime[buyer]
+                        - request.getBufferTookTime()
+                        + request.getCompletionTime(), 2);
             }
         }
 

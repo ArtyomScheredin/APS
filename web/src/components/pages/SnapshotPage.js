@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import Main from "../Main";
 import {useParams} from "react-router";
-import {MAIN_URL, SNAPSHOT_URL, SNAPSHOT_URL_FULL} from "../Constants";
+import {MAIN_URL, SIZE_URL, SNAPSHOT_URL, SNAPSHOT_URL_FULL} from "../Constants";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import Stub from "../Stub";
 
@@ -22,8 +22,16 @@ const SnapshotPage = () => {
     const [snapshot, setSnapshot] = useState(null)
     const [play, setPlay] = useState(false)
     const [speed, setSpeed] = useState(1000)
+    const [size, setSize] = useState(0)
     const navigate = useNavigate();
 
+    useEffect(() => {
+        fetch(MAIN_URL + SIZE_URL)
+            .then(response => response.json()
+            ).then(response => {
+            setSize(response.size)
+        })
+    }, [])
 
     useEffect(() => {
         fetch(MAIN_URL + SNAPSHOT_URL + "?" + new URLSearchParams({id: searchParams.get("id")}))
@@ -68,8 +76,7 @@ const SnapshotPage = () => {
                             return
                         }
                         setSearchParams(new URLSearchParams({id: parseInt(searchParams.get("id")) - 1}))
-                    }
-                    }>←
+                    }}>←
                 </button>
                 <textarea onChange={(e) => {
                     if (isNaN(+e.target.value)) {
@@ -102,6 +109,7 @@ const SnapshotPage = () => {
                     }
                     setSpeed(e.target.value)
                 }} value={speed}></textarea>
+                <h1>size: {size}</h1>
             </div>
             {snapshot == null ? <Stub message={"No corresponding snapshots"}/> : <>
                 <div className="snapshot__header">
@@ -124,8 +132,7 @@ const SnapshotPage = () => {
                 </div>
             </>}
         </div>
-    </>)
-        ;
+    </>);
 }
 
 
