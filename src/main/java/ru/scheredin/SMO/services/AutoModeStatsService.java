@@ -16,6 +16,10 @@ public class AutoModeStatsService {
     private boolean isReady = false;
     private int requestSerial = 1;
 
+    public ArrayList<Request> getRequests() {
+        return requests;
+    }
+
     public AutoModeStatsService() {
     }
 
@@ -68,13 +72,10 @@ public class AutoModeStatsService {
     public List<CourierStats> getCourierResults() {
         ArrayList<CourierStats> result = new ArrayList<>(couriersRestTime.size());
         for (int i = 0; i < couriersWorkTime.size(); i++) {
-            Double rest = couriersRestTime.get(i);
-            Double work = couriersWorkTime.get(i);
-            if (rest == null) {
-                result.add(i, new CourierStats(i, Double.MAX_VALUE));
-            } else {
-                result.add(i, new CourierStats(i, work / (rest + work)));
-            }
+            double rest = Math.abs(couriersRestTime.get(i));
+            double work = Math.abs(couriersWorkTime.get(i));
+            double efficiency = work / (rest + work);
+            result.add(i, new CourierStats(i, efficiency));
         }
         return result;
     }
@@ -115,12 +116,12 @@ public class AutoModeStatsService {
         for (Request request : requests) {   //Calculating dispersion  disp = (sum(x_avg - x_i)^2) /n
             int buyer = request.getBuyerNumber();
             dispBufferTime[buyer] += Math.pow(-avgBufferTime[buyer]
-                    - request.getBufferInsertedTime()
-                    + request.getBufferTookTime(), 2);
+                                                      - request.getBufferInsertedTime()
+                                                      + request.getBufferTookTime(), 2);
             if (request.getCompletionTime() != null) {
                 dispProcessingTime[buyer] += Math.pow(-avgBufferTime[buyer]
-                        - request.getBufferTookTime()
-                        + request.getCompletionTime(), 2);
+                                                              - request.getBufferTookTime()
+                                                              + request.getCompletionTime(), 2);
             }
         }
 
@@ -134,13 +135,13 @@ public class AutoModeStatsService {
             double rejectProbability = (double) (requestsCount[i] - completed[i]) / requestsCount[i];
             double avgTime = avgBufferTime[i] + avgProcessingTime[i];
             result.add(new BuyerStats(i,
-                    requestsCount[i],
-                    rejectProbability,
-                    avgTime,
-                    avgBufferTime[i],
-                    avgProcessingTime[i],
-                    dispBufferTime[i],
-                    dispProcessingTime[i]));
+                                      requestsCount[i],
+                                      rejectProbability,
+                                      avgTime,
+                                      avgBufferTime[i],
+                                      avgProcessingTime[i],
+                                      dispBufferTime[i],
+                                      dispProcessingTime[i]));
         }
         return result;
     }

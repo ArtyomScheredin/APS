@@ -21,7 +21,6 @@ public class OrchestratorService {
     private ClockService clock;
 
     public void runRound(Round round) {
-        CourierStats courierStats = new CourierStats(1, 2);
         Buffer buffer = new Buffer(round.bufferCapacity(),
                 snapshotService,
                 clock);

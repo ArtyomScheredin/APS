@@ -9,6 +9,7 @@ import ru.scheredin.SMO.api.StepModeController;
 import ru.scheredin.SMO.dto.Utils;
 import ru.scheredin.SMO.services.AutoModeStatsService;
 import ru.scheredin.SMO.services.ClockService;
+import ru.scheredin.SMO.services.EvaluatorService;
 import ru.scheredin.SMO.services.OrchestratorService;
 import ru.scheredin.SMO.services.SnapshotService;
 
@@ -23,6 +24,7 @@ public class Config extends AbstractModule {
         bind(StepModeController.class).toInstance(new StepModeController());
         bind(AutoModeController.class).toInstance(new AutoModeController());
         bind(ObjectMapper.class).toInstance(new ObjectMapper());
+        bind(EvaluatorService.class).toInstance(new EvaluatorService());
         bind(Integer.class).annotatedWith(Names.named("MATH_ACCURACY")).toInstance(3);
         requestStaticInjection(Utils.class);
     }

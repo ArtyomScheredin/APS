@@ -32,7 +32,6 @@ public final class Application {
         String url = "http://localhost:" + port;
 
         Injector injector = Guice.createInjector(new Config());
-        OrchestratorService orchestrator = injector.getInstance(OrchestratorService.class);
         MainController mainController = injector.getInstance(MainController.class);
         StepModeController stepModeController = injector.getInstance(StepModeController.class);
         AutoModeController autoModeController = injector.getInstance(AutoModeController.class);
