@@ -21,6 +21,9 @@ public class OrchestratorService {
     private ClockService clock;
 
     public void runRound(Round round) {
+        clock.setTime(0);
+        autoModeStatsService.clear();
+        snapshotService.clear();
         Buffer buffer = new Buffer(round.bufferCapacity(),
                 snapshotService,
                 clock);
@@ -39,8 +42,6 @@ public class OrchestratorService {
                 autoModeStatsService,
                 snapshotService,
                 clock);
-        autoModeStatsService.clear();
-        snapshotService.clear();
         snapshotService.init(buyersPool, buffer, couriersPool);
         autoModeStatsService.init(round.buyersNumber(), round.courierNumber());
 

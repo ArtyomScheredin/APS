@@ -10,7 +10,7 @@ export const useInput = initialValue => {
         reset: () => setValue(""),
         onChange: event => {
             const newValue = event.target.value;
-            if (isNaN(newValue) || newValue < 0) {
+            if (newValue < 0) {
                 alert("Input parameters should be positive number")
             } else {
                 setValue(newValue)

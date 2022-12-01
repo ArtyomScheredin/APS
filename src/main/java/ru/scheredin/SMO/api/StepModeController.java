@@ -1,6 +1,5 @@
 package ru.scheredin.SMO.api;
 
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
@@ -12,8 +11,6 @@ import one.nio.http.RequestMethod;
 import one.nio.http.Response;
 import ru.scheredin.SMO.dto.Snapshot;
 import ru.scheredin.SMO.services.SnapshotService;
-
-import java.nio.ByteBuffer;
 
 
 public class StepModeController {

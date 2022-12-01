@@ -16,8 +16,8 @@ const StartRoundPage = ({setTab}) => {
     customHooks.set("courierNumber", useInput(`5`))
     customHooks.set("processingTime", useInput(`0.1`))
     customHooks.set("bufferCapacity", useInput(`10`))
-    customHooks.set("lambda", useInput(`12`))
-    customHooks.set("duration", useInput(`5`))
+    customHooks.set("lambda", useInput(`24`))
+    customHooks.set("duration", useInput(`25`))
 
     const handleSubmit = (evt) => {
         evt.preventDefault()

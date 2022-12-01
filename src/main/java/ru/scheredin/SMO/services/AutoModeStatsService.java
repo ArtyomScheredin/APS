@@ -10,8 +10,8 @@ import java.util.List;
 
 public class AutoModeStatsService {
     private ArrayList<Request> requests = new ArrayList<>();
-    private ArrayList<Double> couriersRestTime;
-    private ArrayList<Double> couriersWorkTime;
+    private ArrayList<Double> couriersRestTime = new ArrayList<>();
+    private ArrayList<Double> couriersWorkTime = new ArrayList<>();
     private int buyersNumber;
     private boolean isReady = false;
     private int requestSerial = 1;
@@ -35,8 +35,8 @@ public class AutoModeStatsService {
 
     public void clear() {
         requests.clear();
-        couriersRestTime = null;
-        couriersRestTime = null;
+        couriersWorkTime.clear();
+        couriersRestTime.clear();
         isReady = false;
         requestSerial = 1;
     }

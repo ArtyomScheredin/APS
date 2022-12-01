@@ -54,7 +54,7 @@ public class BuyersPool implements Dumpable {
                     buffer.insert(request);
                     state.set(curBuyer, null);
                     snapshotService.save("Inserted request " + request);
-                    couriersPool.notifyNewRequest();
+                    couriersPool.notifyFindCourier();
                 });
             }
         }

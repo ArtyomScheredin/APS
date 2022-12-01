@@ -50,7 +50,7 @@ public class IndexedArray implements Iterable<Request> {
     }
 
     public Request rejectNewest() {
-        Map.Entry<Request, Integer> entry = indexes.pollFirstEntry();
+        Map.Entry<Request, Integer> entry = indexes.pollLastEntry();
         Integer newestIndex = entry.getValue();
         buffer.set(newestIndex, null);
         size--;

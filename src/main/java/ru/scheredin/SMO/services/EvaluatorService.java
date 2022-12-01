@@ -21,13 +21,13 @@ public class EvaluatorService {
     public static void main(String[] args) {
         Injector injector = Guice.createInjector(new Config());
         EvaluatorService evaluator = injector.getInstance(EvaluatorService.class);
-        Map<Integer, Double> couriers = Map.of(1000, 1.,
-                                               2200, .3,
-                                               1400, .5);
+        Map<Integer, Double> couriers = Map.of(1000, .2,
+                                               2200, .1,
+                                               1400, .15);
 
-        evaluator.findOptimalConfiguration(5, 2,
-                                           10, 2000, 3, 30,
-                                           couriers, 0.05, 10);
+        evaluator.findOptimalConfiguration(5, 3,
+                                           15, 2000, 3, 30,
+                                           Map.of(1400, .15), 24, 25);
     }
 
     public Round findOptimalConfiguration(int buyersNumber, int minBufferCapacity, int maxBufferCapacity,

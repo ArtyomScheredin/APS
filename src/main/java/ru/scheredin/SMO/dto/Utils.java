@@ -12,7 +12,9 @@ public class Utils {
     private static int ACCURACY;
 
     static double round(Double dispersionProcessingTime) {
-        //return dispersionProcessingTime;
+        if (dispersionProcessingTime.isInfinite() || dispersionProcessingTime.isNaN()) {
+            return Double.MAX_VALUE;
+        }
         return new BigDecimal(dispersionProcessingTime).setScale(ACCURACY, RoundingMode.UP).doubleValue();
     }
 }

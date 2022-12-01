@@ -20,13 +20,20 @@ public class CouriersPool implements Dumpable {
                         ClockService clock, OrchestratorService orchestratorService) {
         couriers = new ArrayList<>(couriersNumber);
         for (int index = 0; index < couriersNumber; index++) {
-            couriers.add(new Courier(index, processingTime, buffer, snapshotService, autoModeStatsService, clock, orchestratorService));
+            couriers.add(new Courier(index, 
+                                     processingTime,
+                                     buffer, 
+                                     snapshotService, 
+                                     autoModeStatsService,
+                                     clock,
+                                     orchestratorService,
+                                     this));
         }
     }
 
-    public void notifyNewRequest() {
+    public void notifyFindCourier() {
         Optional<Courier> freeCourier = couriers.stream().filter(Courier::isFree).findFirst();
-        freeCourier.ifPresent(Courier::submitTask);
+        freeCourier.ifPresent(Courier::startTask);
     }
 
     @Override
